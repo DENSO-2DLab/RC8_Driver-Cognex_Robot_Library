@@ -340,3 +340,11 @@ __pycache__/
 *.xsd.cs
 
 # End of https://www.gitignore.io/api/windows,visualstudio,microsoftoffice
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/StaticSim.map
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/StaticSim.bin
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/Source Files/PacAttri.lst
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/Setting.xml
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/RC8Data.mdb
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/Model Data/VS050A1-AV6-NNN-NNN.x
+src/Cognex_Universal_Driver/Cognex_Universal_Driver/Cognex_Universal_Driver.WCN
+src/Cognex_Universal_Driver/Cognex_Universal_Driver.WPJ
