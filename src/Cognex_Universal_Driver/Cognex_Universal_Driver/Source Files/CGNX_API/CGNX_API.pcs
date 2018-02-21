@@ -32,7 +32,7 @@ Sub CGNX_DevClose(ByVal srvID As Integer)
 End Sub
 
 '========================================================================================
-' Reception/Transmisison
+' Reception/Transmisison (Denso to Cognex Commands)
 '========================================================================================
 
 'Sends the command string to the selected server and waits for a response
@@ -51,10 +51,12 @@ Function CGNX_ExecuteCmd(ByVal srvID As Integer, ByVal cmdStr As String) As Stri
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
 
-'Wait for the Vision System to send a Command (Used for HMI Program)
-Function CGNX_RecvCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
-	Dim command As Variant
+'========================================================================================
+' Reception/Transmisison (Cognex to Denso Commands)
+'========================================================================================
 
+'Wait for the Vision System to send a Command (Used for HMI Program)
+Function CGNX_RecvCmd(ByVal srvID As Integer) As String
 	On Error GoTo ErrorHandler
 		Call CGNX_DevOpen(srvID)				' Open Comm Port
 		CGNX_RecvCmd = Comm.Input(srvID)		' Wait for Message Response
@@ -62,3 +64,13 @@ Function CGNX_RecvCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
 	ErrorHandler: 
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
+
+'Send response after processing the received command
+Sub CGNX_SendCmd(ByVal srvID As Integer, ByVal responseStr As String) 
+	On Error GoTo ErrorHandler
+		Call CGNX_DevOpen(srvID)				' Open Comm Port
+		Comm.Output srvID, responseStr			' Send String Message to PC
+		Exit Sub							
+	ErrorHandler: 
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Sub
