@@ -1,0 +1,64 @@
+'!TITLE "Cognex Function API"
+
+#Include "CGNX_API.h"
+
+Sub Main
+	
+End Sub
+
+'========================================================================================
+' Initialization / Close
+' Communication line number (IP address of PC, Port number [7890], Delimiter [LF])
+'========================================================================================
+
+'Open the communication line
+Function CGNX_DevOpen(ByVal srvID As Integer) As Integer
+	Comm.Close srvID		'Close Comm Port
+
+	On Error GoTo finally
+	    If Comm.State(srvID) = 0 Then
+			Comm.Open srvID
+		End If	
+		CGNX_DevOpen = SUCCEEDED		' Comm Port Successfully Open
+		Exit Function
+	finally:
+		MsgBox("Communication connection error. Revise the connection.")
+		CGNX_DevOpen = FAILED			' Comm Por Failed to Open
+End Function
+
+'Close the communication line
+Sub CGNX_DevClose(ByVal srvID As Integer)
+	Comm.Close srvID
+End Sub
+
+'========================================================================================
+' Reception/Transmisison
+'========================================================================================
+
+'Sends the command string to the selected server and waits for a response
+Function CGNX_ExecuteCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
+	Dim command As Variant
+
+	On Error GoTo ErrorHandler
+		Call CGNX_DevOpen(srvID)			' Open Comm Port
+	
+		Comm.Output srvID, cmdStr			' Send String Message to PC
+		CGNX_ExecuteCmd = Comm.Input(srvID)	' Wait for Message Response
+		
+		Call CGNX_DevClose(srvID)			' Close Comm Port
+		Exit Function							
+	ErrorHandler: 
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'Wait for the Vision System to send a Command (Used for HMI Program)
+Function CGNX_RecvCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
+	Dim command As Variant
+
+	On Error GoTo ErrorHandler
+		Call CGNX_DevOpen(srvID)				' Open Comm Port
+		CGNX_RecvCmd = Comm.Input(srvID)		' Wait for Message Response
+		Exit Function							
+	ErrorHandler: 
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
