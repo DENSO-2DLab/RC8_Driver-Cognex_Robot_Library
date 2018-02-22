@@ -1,0 +1,48 @@
+'!TITLE "Denso robot program"
+
+#Define _COM_INDEX_ 4
+
+#Include "..\CGNX_API\CGNX_API.pcs"
+
+Sub Main
+	Dim recvMsg As Variant
+	DIm recvCmd As String
+	Dim sendMsg As String
+
+	Call CGNX_DevClose(_COM_INDEX_)
+	If CGNX_DevOpen(_COM_INDEX_) = FAILED Then Exit Sub
+
+	Comm.Clear _COM_INDEX_ 'Clear the reception buffer
+  	Wait Comm.State(_COM_INDEX_) = 2  'Wait for the connection from the client
+	
+	Do
+		recvMsg = Split(CGNX_RecvCmd(_COM_INDEX_),",")
+		
+		recvMsg(0) = Trim(UCase(recvMsg(0)))
+		Select Case recvMsg(0)
+			Case "SS"
+				' Set Speed 
+				sendMsg = CGNX_SS(recvMsg)
+			Case "GS"
+				' Get Speed
+			Case "MR" 
+				' Move Relative (Position Type)
+			Case "TP"
+				' Touch Point (Teach Point)
+			Case "MP"
+				' Move to Position
+			Case "SO"
+				' Set Output
+			Case "MJ"
+				' Move Relative (Joint Type)
+			Case "GV"
+				' Get API Version
+				sendMsg = CGNX_GV(recvMsg)
+			Case Else
+				' Not Supported
+		End Select
+
+		Call CGNX_SendCmd(_COM_INDEX_, sendMsg)
+		sendMsg = ""
+	Loop
+End Sub

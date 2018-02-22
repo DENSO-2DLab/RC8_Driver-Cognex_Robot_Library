@@ -41,7 +41,7 @@ Function CGNX_ExecuteCmd(ByVal srvID As Integer, ByVal cmdStr As String) As Stri
 
 	On Error GoTo ErrorHandler
 		Call CGNX_DevOpen(srvID)			' Open Comm Port
-	
+
 		Comm.Output srvID, cmdStr			' Send String Message to PC
 		CGNX_ExecuteCmd = Comm.Input(srvID)	' Wait for Message Response
 		
@@ -58,7 +58,6 @@ End Function
 'Wait for the Vision System to send a Command (Used for HMI Program)
 Function CGNX_RecvCmd(ByVal srvID As Integer) As String
 	On Error GoTo ErrorHandler
-		Call CGNX_DevOpen(srvID)				' Open Comm Port
 		CGNX_RecvCmd = Comm.Input(srvID)		' Wait for Message Response
 		Exit Function							
 	ErrorHandler: 
@@ -68,9 +67,69 @@ End Function
 'Send response after processing the received command
 Sub CGNX_SendCmd(ByVal srvID As Integer, ByVal responseStr As String) 
 	On Error GoTo ErrorHandler
-		Call CGNX_DevOpen(srvID)				' Open Comm Port
 		Comm.Output srvID, responseStr			' Send String Message to PC
 		Exit Sub							
 	ErrorHandler: 
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Sub
+
+'========================================================================================
+'Cognex API Function(For function details, refer to Cognex Robot Library manual.)
+'======================================================================================== 
+
+' Set Speed
+Function CGNX_SS(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant
+	Dim spdVal As Single
+	
+	On Error GoTo ErrorHandler
+		
+		If recvCmd(0) = "SS" Then
+			responseMsg(0) = recvCmd(0)
+			spdVal = Val(recvCmd(1))
+			Takearm
+			Speed spdVal
+			Givearm
+		Else
+			MsgBox("Input data is incorrect")
+		End If 
+
+		' Check that Speed has changed successfully
+		If CurSpd <> spdVal Then 
+			responseMsg(1) = STR(FAILED)
+		Else
+			responseMsg(1) = STR(SUCCEEDED)
+		End If
+		
+		CGNX_SS = Join(responseMsg, ",")
+		Exit Function
+	
+	ErrorHandler:
+		responseMsg(0) = recvCmd(0)
+		responseMsg(1) = STR(FAILED)
+		CGNX_SS = Join(responseMsg, ",")
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+' Get API Version
+Function CGNX_GV(ByVal recvCmd As Variant) As String
+	Dim responseMsg(2) As Variant
+
+	On Error GoTo ErrorHandler	
+		If recvCmd(0) = "GV" Then
+			responseMsg(0) = recvCmd(0)
+			responseMsg(1) = STR(SUCCEEDED)
+			responseMsg(2) = CGNX_API_VER
+		Else
+			MsgBox("Input data is incorrect")
+		End If 	
+		
+		CGNX_GV = Join(responseMsg, ",")
+		Exit Function
+			
+	ErrorHandler:
+		responseMsg(0) = recvCmd(0)
+		responseMsg(1) = STR(FAILED)
+		CGNX_GV = Join(responseMsg, ",")
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
