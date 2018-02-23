@@ -28,7 +28,7 @@ Sub Main
 				'sendMsg = CGNX_GS(recvMsg)
 			Case "MR" 
 				' Move Relative (Position Type)
-				'sendMsg = CGNX_MR(recvMsg)
+				sendMsg = CGNX_MR(recvMsg)
 			Case "TP"
 				' Touch Point (Teach Point)
 				'sendMsg = CGNX_TP(recvMsg)
