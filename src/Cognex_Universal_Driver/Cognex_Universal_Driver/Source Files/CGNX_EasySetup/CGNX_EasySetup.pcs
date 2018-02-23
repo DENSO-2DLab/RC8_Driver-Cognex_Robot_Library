@@ -22,7 +22,7 @@ Sub Main
 		Select Case recvMsg(0)
 			Case "SS"
 				' Set Speed 
-				sendMsg = CGNX_SS(recvMsg)
+				'sendMsg = CGNX_SS(recvMsg)
 			Case "GS"
 				' Get Speed
 				'sendMsg = CGNX_GS(recvMsg)

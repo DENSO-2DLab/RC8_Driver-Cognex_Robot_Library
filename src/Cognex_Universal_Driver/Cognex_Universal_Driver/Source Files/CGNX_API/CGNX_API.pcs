@@ -88,37 +88,6 @@ End Sub
 '======================================================================================== 
 
 '
-'Set Speed
-'
-Function CGNX_SS(ByVal recvCmd As Variant) As String
-	Dim responseMsg(1) As Variant
-	
-	If checkInputData(recvCmd(0), "SS") = Int2Str(FAILED) Then 
-		CGNX_SS = "SS," + Int2Str(FAILED)
-		Exit Function
-	End If
-
-	On Error GoTo ErrorHandler
-		' Set External Speed		
-		ExtSpeed Val(recvCmd(1))
-
-		' Verify that External Speed changed to new value
-		If CurExtSpd = Val(recvCmd(1)) Then 
-			responseMsg(0) = recvCmd(0)
-			responseMsg(1) = Int2Str(SUCCEEDED)
-			CGNX_SS = Join(responseMsg, ",")
-		Else
-			CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)			
-		End If
-		
-		Exit Function
-	
-	ErrorHandler:
-		CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)
-		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
-End Function
-
-'
 'Move Relative (Position Type)
 '
 Function CGNX_MR(ByVal recvCmd As Variant) As String
