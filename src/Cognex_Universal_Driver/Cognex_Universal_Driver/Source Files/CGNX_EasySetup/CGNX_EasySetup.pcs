@@ -1,6 +1,6 @@
 '!TITLE "Denso robot program"
 
-#Define _COM_INDEX_ 4
+#Define _COM_INDEX_ 8
 
 #Include "..\CGNX_API\CGNX_API.pcs"
 
@@ -14,7 +14,7 @@ Sub Main
 
 	Comm.Clear _COM_INDEX_ 'Clear the reception buffer
   	Wait Comm.State(_COM_INDEX_) = 2  'Wait for the connection from the client
-	
+
 	Do
 		recvMsg = Split(CGNX_RecvCmd(_COM_INDEX_),",")
 		
@@ -25,19 +25,34 @@ Sub Main
 				sendMsg = CGNX_SS(recvMsg)
 			Case "GS"
 				' Get Speed
+				'sendMsg = CGNX_GS(recvMsg)
 			Case "MR" 
 				' Move Relative (Position Type)
+				'sendMsg = CGNX_MR(recvMsg)
 			Case "TP"
 				' Touch Point (Teach Point)
+				'sendMsg = CGNX_TP(recvMsg)
 			Case "MP"
 				' Move to Position
+				'sendMsg = CGNX_MP(recvMsg)
 			Case "SO"
 				' Set Output
+				'sendMsg = CGNX_SO(recvMsg)
 			Case "MJ"
 				' Move Relative (Joint Type)
+				'sendMsg = CGNX_MJ(recvMsg)
 			Case "GV"
 				' Get API Version
 				sendMsg = CGNX_GV(recvMsg)
+			Case "CAL"
+				' Execute Auto Calibration
+				'sendMsg = CGNX_CAL(recvMsg)
+			Case "TVGR"
+				' Train Step
+				'sendMsg = CGNX_TVGR(recvMsg)
+			Case "XVGR"
+				' Execute Step
+				'sendMsg = CGNX_XVGR(recvMsg)
 			Case Else
 				' Not Supported
 		End Select
@@ -45,4 +60,5 @@ Sub Main
 		Call CGNX_SendCmd(_COM_INDEX_, sendMsg)
 		sendMsg = ""
 	Loop
+	
 End Sub
