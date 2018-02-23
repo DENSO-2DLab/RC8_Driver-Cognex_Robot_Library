@@ -8,10 +8,12 @@ End Sub
 
 '========================================================================================
 ' Initialization / Close
-' Communication line number (IP address of PC, Port number [7890], Delimiter [LF])
+' Communication line number (IP address of PC, Port number [23], Delimiter [LF])
 '========================================================================================
 
+'
 'Open the communication line
+'
 Function CGNX_DevOpen(ByVal srvID As Integer) As Integer
 	Comm.Close srvID		'Close Comm Port
 
@@ -26,7 +28,9 @@ Function CGNX_DevOpen(ByVal srvID As Integer) As Integer
 		CGNX_DevOpen = FAILED			' Comm Por Failed to Open
 End Function
 
+'
 'Close the communication line
+'
 Sub CGNX_DevClose(ByVal srvID As Integer)
 	Comm.Close srvID
 End Sub
@@ -35,7 +39,9 @@ End Sub
 ' Reception/Transmisison (Denso to Cognex Commands)
 '========================================================================================
 
+'
 'Sends the command string to the selected server and waits for a response
+'
 Function CGNX_ExecuteCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
 	Dim command As Variant
 
@@ -55,7 +61,9 @@ End Function
 ' Reception/Transmisison (Cognex to Denso Commands)
 '========================================================================================
 
+'
 'Wait for the Vision System to send a Command (Used for HMI Program)
+'
 Function CGNX_RecvCmd(ByVal srvID As Integer) As String
 	On Error GoTo ErrorHandler
 		CGNX_RecvCmd = Comm.Input(srvID)		' Wait for Message Response
@@ -64,7 +72,9 @@ Function CGNX_RecvCmd(ByVal srvID As Integer) As String
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
 
+'
 'Send response after processing the received command
+'
 Sub CGNX_SendCmd(ByVal srvID As Integer, ByVal responseStr As String) 
 	On Error GoTo ErrorHandler
 		Comm.Output srvID, responseStr			' Send String Message to PC
@@ -77,7 +87,9 @@ End Sub
 'Cognex API Function(For function details, refer to Cognex Robot Library manual.)
 '======================================================================================== 
 
-' Set Speed
+'
+'Set Speed
+'
 Function CGNX_SS(ByVal recvCmd As Variant) As String
 	Dim responseMsg(1) As Variant
 	
@@ -106,7 +118,56 @@ Function CGNX_SS(ByVal recvCmd As Variant) As String
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
 
+'
+'Move Relative (Position Type)
+'
+Function CGNX_MR(ByVal recvCmd As Variant) As String
+	Dim responseMsg(7) As Variant
+	Dim relRobPos As Position
+
+	If checkInputData(recvCmd(0), "MR") = Int2Str(FAILED) Then 
+		CGNX_MR = "MR," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+
+		'X-Y-Z Offets
+		LetX relRobPos = Val(recvCmd(1))
+		LetY relRobPos = Val(recvCmd(2))
+		LetZ relRobPos = Val(recvCmd(3))
+			
+		'Rz-Ry-Rx (A-B-C on Cognex Documentation) Offsets
+		LetRz relRobPos =  Val(recvCmd(4))
+		LetRy relRobPos =  Val(recvCmd(5))
+		LetRx relRobPos =  Val(recvCmd(6))
+
+		'Do Relative Move
+		TakeArm Keep = 1
+		Speed 100
+		Move P, @E Dev(CurPos, relRobPos)
+		GiveArm
+
+		'Send Response
+		responseMsg(0) = recvCmd(0)
+		responseMsg(1) = Int2Str(SUCCEEDED)
+		responseMsg(2) = Dob2Str(PosX(CurPos))
+		responseMsg(3) = Dob2Str(PosY(CurPos))
+		responseMsg(4) = Dob2Str(PosZ(CurPos))
+		responseMsg(5) = Dob2Str(PosRz(CurPos))
+		responseMsg(6) = Dob2Str(PosRy(CurPos))
+		responseMsg(7) = Dob2Str(PosRx(CurPos))
+		CGNX_MR = Join(responseMsg, ",")
+		Exit Function
+
+	ErrorHandler:
+		CGNX_MR = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
 'Get API Version
+'
 Function CGNX_GV(ByVal recvCmd As Variant) As String
 	Dim responseMsg(2) As Variant
 
@@ -132,10 +193,24 @@ End Function
 '========================================================================================
 'Utility Functions
 '========================================================================================
+
+'
+'
+'
 Function Int2Str(ByVal num As Integer) As String
 	Int2Str = Trim(Str(num))
 End Function
 
+'
+'
+'
+Function Dob2Str(ByVal num As Double) As String
+	Dob2Str = Trim(Str(num))
+End Function
+
+'
+'
+'
 Function checkInputData(ByVal inputData As Variant, ByVal setData As String) As String
 	If inputData = setData Then 
 		checkInputData = Int2Str(SUCCEEDED)
