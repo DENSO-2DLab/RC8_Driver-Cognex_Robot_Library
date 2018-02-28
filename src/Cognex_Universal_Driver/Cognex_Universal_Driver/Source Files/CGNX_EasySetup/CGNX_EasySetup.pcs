@@ -34,7 +34,7 @@ Sub Main
 				'sendMsg = CGNX_TP(recvMsg)
 			Case "MP"
 				' Move to Position
-				'sendMsg = CGNX_MP(recvMsg)
+				sendMsg = CGNX_MP(recvMsg)
 			Case "SO"
 				' Set Output
 				'sendMsg = CGNX_SO(recvMsg)
