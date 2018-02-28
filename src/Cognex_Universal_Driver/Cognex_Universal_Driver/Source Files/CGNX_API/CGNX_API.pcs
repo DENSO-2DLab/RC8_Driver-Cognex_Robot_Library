@@ -262,6 +262,35 @@ Function CGNX_MP(ByVal recvCmd As Variant) As String
 End Function
 
 '
+' Set Output
+'
+Function CGNX_SO(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant 
+
+	If checkInputData(recvCmd(0), "SO") = Int2Str(FAILED) Then 
+		CGNX_SO = "SO," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		If Val(recvCmd(2)) = 1  Then
+			Set IO[Val(recvCmd(1))]
+		Else
+			Reset IO[Val(recvCmd(1))]
+		End If
+		
+		responseMsg(0) = recvCmd(0)		
+		responseMsg(1) = Int2Str(SUCCEEDED)
+		CGNX_SO = Join(responseMsg, ",")
+		
+		Exit Function
+
+	ErrorHandler:
+		CGNX_SO = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
 'Get API Version
 '
 Function CGNX_GV(ByVal recvCmd As Variant) As String
