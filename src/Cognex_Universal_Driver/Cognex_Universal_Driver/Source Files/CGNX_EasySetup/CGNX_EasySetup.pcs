@@ -40,7 +40,7 @@ Sub Main
 				'sendMsg = CGNX_SO(recvMsg)
 			Case "MJ"
 				' Move Relative (Joint Type)
-				'sendMsg = CGNX_MJ(recvMsg)
+				sendMsg = CGNX_MJ(recvMsg)
 			Case "GV"
 				' Get API Version
 				sendMsg = CGNX_GV(recvMsg)
