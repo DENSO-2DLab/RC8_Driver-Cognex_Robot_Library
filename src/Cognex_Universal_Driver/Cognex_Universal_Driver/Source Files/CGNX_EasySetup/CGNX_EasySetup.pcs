@@ -22,7 +22,7 @@ Sub Main
 		Select Case recvMsg(0)
 			Case "SS"
 				' Set Speed 
-				'sendMsg = CGNX_SS(recvMsg)
+				sendMsg = CGNX_SS(recvMsg)
 			Case "GS"
 				' Get Speed
 				sendMsg = CGNX_GS(recvMsg)
@@ -31,13 +31,13 @@ Sub Main
 				sendMsg = CGNX_MR(recvMsg)
 			Case "TP"
 				' Touch Point (Teach Point)
-				'sendMsg = CGNX_TP(recvMsg)
+				sendMsg = CGNX_TP(recvMsg)
 			Case "MP"
 				' Move to Position
 				sendMsg = CGNX_MP(recvMsg)
 			Case "SO"
 				' Set Output
-				'sendMsg = CGNX_SO(recvMsg)
+				sendMsg = CGNX_SO(recvMsg)
 			Case "MJ"
 				' Move Relative (Joint Type)
 				sendMsg = CGNX_MJ(recvMsg)
