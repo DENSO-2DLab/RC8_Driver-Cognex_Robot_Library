@@ -88,6 +88,37 @@ End Sub
 '======================================================================================== 
 
 '
+'Set Speed
+'
+Function CGNX_SS(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant
+	
+	If checkInputData(recvCmd(0), "SS") = Int2Str(FAILED) Then 
+		CGNX_SS = "SS," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		' Set External Speed		
+		ExtSpeed Val(recvCmd(1))
+
+		' Verify that External Speed changed to new value
+		If CurExtSpd = Val(recvCmd(1)) Then 
+			responseMsg(0) = recvCmd(0)
+			responseMsg(1) = Int2Str(SUCCEEDED)
+			CGNX_SS = Join(responseMsg, ",")
+		Else
+			CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)			
+		End If
+		
+		Exit Function
+	
+	ErrorHandler:
+		CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
 'Get Speed
 '
 Function CGNX_GS(ByVal recvCmd As Variant) As String
@@ -161,6 +192,39 @@ Function CGNX_MR(ByVal recvCmd As Variant) As String
 End Function
 
 '
+'Teach Point (Based on Index value)
+'
+Function CGNX_TP(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant 
+
+	If checkInputData(recvCmd(0), "TP") = Int2Str(FAILED) Then 
+		CGNX_TP = "TP," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		
+		'Store Current position into P type variable.
+		P[Val(recvCmd(1))] = CurPos
+
+		responseMsg(0) = recvCmd(0)
+
+		'Check that current variable has changed. 
+		If P[Val(recvCmd(1))] = CurPos Then 
+			responseMsg(1) = Int2Str(SUCCEEDED)
+		Else
+			responseMsg(1) = Int2Str(FAILED)
+		End If
+		
+		CGNX_TP = Join(responseMsg, ",")
+		Exit Function
+
+	ErrorHandler:
+		CGNX_TP = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
 ' Move to Point (P Variable)
 ' 
 Function CGNX_MP(ByVal recvCmd As Variant) As String
@@ -194,6 +258,37 @@ Function CGNX_MP(ByVal recvCmd As Variant) As String
 
 	ErrorHandler:
 		CGNX_MP = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+' Set Output
+'
+Function CGNX_SO(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant
+	Dim portNo As Integer 
+
+	If checkInputData(recvCmd(0), "SO") = Int2Str(FAILED) Then 
+		CGNX_SO = "SO," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		portNo = Val(recvCmd(1))
+		If Val(recvCmd(2)) = 1  Then
+			Set IO[portNo]
+		Else
+			Reset IO[portNo]
+		End If
+		
+		responseMsg(0) = recvCmd(0)		
+		responseMsg(1) = "1"'Int2Str(SUCCEEDED)
+		CGNX_SO = Join(responseMsg, ",")
+		
+		Exit Function
+
+	ErrorHandler:
+		CGNX_SO = recvCmd(0) + "," + Int2Str(FAILED)
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
 
