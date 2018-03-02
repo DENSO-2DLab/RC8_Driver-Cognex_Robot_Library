@@ -1,0 +1,36 @@
+'!TITLE "Denso robot program"
+
+#Include "..\CGNX_API.pcs"
+
+'
+'Teach Point (Based on Index value)
+'
+Function CGNX_TP(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant 
+
+	If checkInputData(recvCmd(0), "TP") = Int2Str(FAILED) Then 
+		CGNX_TP = "TP," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		
+		'Store Current position into P type variable.
+		P[Val(recvCmd(1))] = CurPos
+
+		responseMsg(0) = recvCmd(0)
+
+		'Check that current variable has changed. 
+		If P[Val(recvCmd(1))] = CurPos Then 
+			responseMsg(1) = Int2Str(SUCCEEDED)
+		Else
+			responseMsg(1) = Int2Str(FAILED)
+		End If
+		
+		CGNX_TP = Join(responseMsg, ",")
+		Exit Function
+
+	ErrorHandler:
+		CGNX_TP = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function

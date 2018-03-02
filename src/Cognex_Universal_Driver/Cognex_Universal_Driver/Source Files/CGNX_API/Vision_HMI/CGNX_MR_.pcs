@@ -1,0 +1,50 @@
+'!TITLE "Denso robot program"
+
+#Include "..\CGNX_API.pcs"
+
+'
+'Move Relative (Position Type)
+'
+Function CGNX_MR(ByVal recvCmd As Variant) As String
+	Dim responseMsg(7) As Variant
+	Dim relRobPos As Position
+
+	If checkInputData(recvCmd(0), "MR") = Int2Str(FAILED) Then 
+		CGNX_MR = "MR," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+
+		'X-Y-Z Offets
+		LetX relRobPos = Val(recvCmd(1))
+		LetY relRobPos = Val(recvCmd(2))
+		LetZ relRobPos = Val(recvCmd(3))
+			
+		'Rz-Ry-Rx (A-B-C on Cognex Documentation) Offsets
+		LetRz relRobPos =  Val(recvCmd(4))
+		LetRy relRobPos =  Val(recvCmd(5))
+		LetRx relRobPos =  Val(recvCmd(6))
+
+		'Do Relative Move
+		TakeArm Keep = 1
+		Speed 100
+		Move P, @E Dev(CurPos, relRobPos)
+		GiveArm
+
+		'Send Response
+		responseMsg(0) = recvCmd(0)
+		responseMsg(1) = Int2Str(SUCCEEDED)
+		responseMsg(2) = Dob2Str(PosX(CurPos))
+		responseMsg(3) = Dob2Str(PosY(CurPos))
+		responseMsg(4) = Dob2Str(PosZ(CurPos))
+		responseMsg(5) = Dob2Str(PosRz(CurPos))
+		responseMsg(6) = Dob2Str(PosRy(CurPos))
+		responseMsg(7) = Dob2Str(PosRx(CurPos))
+		CGNX_MR = Join(responseMsg, ",")
+		Exit Function
+
+	ErrorHandler:
+		CGNX_MR = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function

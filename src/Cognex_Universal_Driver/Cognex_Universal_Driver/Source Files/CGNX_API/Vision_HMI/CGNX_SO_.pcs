@@ -1,0 +1,34 @@
+'!TITLE "Denso robot program"
+
+#Include "..\CGNX_API.pcs"
+
+'
+' Set Output
+'
+Function CGNX_SO(ByVal recvCmd As Variant) As String
+	Dim responseMsg(1) As Variant
+	Dim portNo As Integer 
+
+	If checkInputData(recvCmd(0), "SO") = Int2Str(FAILED) Then 
+		CGNX_SO = "SO," + Int2Str(FAILED)
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		portNo = Val(recvCmd(1))
+		If Val(recvCmd(2)) = 1  Then
+			Set IO[portNo]
+		Else
+			Reset IO[portNo]
+		End If
+		
+		responseMsg(0) = recvCmd(0)		
+		responseMsg(1) = "1"'Int2Str(SUCCEEDED)
+		CGNX_SO = Join(responseMsg, ",")
+		
+		Exit Function
+
+	ErrorHandler:
+		CGNX_SO = recvCmd(0) + "," + Int2Str(FAILED)
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function

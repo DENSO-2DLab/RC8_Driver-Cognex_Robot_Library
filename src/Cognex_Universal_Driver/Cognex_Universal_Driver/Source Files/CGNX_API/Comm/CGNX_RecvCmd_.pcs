@@ -1,0 +1,14 @@
+'!TITLE "Denso robot program"
+
+#Include "..\CGNX_API.pcs"
+
+'
+'Wait for the Vision System to send a Command (Used for HMI Program)
+'
+Function CGNX_RecvCmd(ByVal srvID As Integer) As String
+	On Error GoTo ErrorHandler
+		CGNX_RecvCmd = Comm.Input(srvID)		' Wait for Message Response
+		Exit Function							
+	ErrorHandler: 
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function

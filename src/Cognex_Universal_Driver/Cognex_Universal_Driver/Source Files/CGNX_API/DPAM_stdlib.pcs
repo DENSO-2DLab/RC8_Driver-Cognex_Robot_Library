@@ -1,0 +1,36 @@
+'!TITLE "Denso robot program"
+
+#Include "CGNX_API.h"
+
+'
+'
+'
+Function Int2Str(ByVal num As Integer) As String
+	Int2Str = Trim(Str(num))
+End Function
+
+'
+'
+'
+Function Dob2Str(ByVal num As Double) As String
+	Dob2Str = Trim(Str(num))
+End Function
+
+'
+'
+'
+Function Sng2Str(ByVal num As Single) As String
+	Sng2Str = Trim(Str(num))
+End Function
+
+'
+'
+'
+Function checkInputData(ByVal inputData As Variant, ByVal setData As String) As String
+	If inputData = setData Then 
+		checkInputData = Int2Str(SUCCEEDED)
+	Else
+		MsgBox("Input data is incorrect")
+		checkInputData = Int2Str(FAILED)
+	End If
+End Function

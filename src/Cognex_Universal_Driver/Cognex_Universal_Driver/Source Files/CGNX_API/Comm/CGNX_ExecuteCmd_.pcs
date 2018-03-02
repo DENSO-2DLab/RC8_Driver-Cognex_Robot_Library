@@ -1,0 +1,21 @@
+'!TITLE "Denso robot program"
+
+#Include "..\CGNX_API.pcs"
+
+'
+'Sends the command string to the selected server and waits for a response
+'
+Function CGNX_ExecuteCmd(ByVal srvID As Integer, ByVal cmdStr As String) As String
+	Dim command As Variant
+
+	On Error GoTo ErrorHandler
+		Call CGNX_DevOpen(srvID)			' Open Comm Port
+
+		Comm.Output srvID, cmdStr			' Send String Message to PC
+		CGNX_ExecuteCmd = Comm.Input(srvID)	' Wait for Message Response
+		
+		Call CGNX_DevClose(srvID)			' Close Comm Port
+		Exit Function							
+	ErrorHandler: 
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
