@@ -3,5 +3,33 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
+	Dim recvMsg As Variant
+
+	Call CGNX_DevClose(_VIS_DEV_COM_)
+	If CGNX_DevOpen(_VIS_DEV_COM_) = FAILED Then Exit Sub
+
+	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
+	recvMsg = CGNX_AC(_VIS_DEV_COM_,1,2,_
+					   PosX(CurPos),PosY(CurPos),PosZ(CurPos),_
+					   PosRz(CurPos),PosRy(CurPos),PosRz(CurPos))
 End Sub
+
+'
+'Auto Calibration (Run)
+'
+Function CGNX_AC(ByVal srvID As Integer, ByVal cam As Integer,_
+				 ByVal targetID As Integer,  xVal As Double,_
+				 ByVal yVal As Double, ByVal zVal As Double,_
+				 ByVal rzVal As Double, ByVal ryVal As Double,_
+				 ByVal rxVal As Double) As Variant
+
+	Dim sendMsg As String
+	Dim recvMsg As String
+
+	sendMsg = Sprintf("AC,%d,%d,%f,%f,%f,%f,%f,%f",_
+					  cam, targetID, xVal, yVal, zVal,_
+					  rxVal, ryVal, rzVal)
+	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
+	CGNX_AC = Split(recvMsg, ",")
+End Function
