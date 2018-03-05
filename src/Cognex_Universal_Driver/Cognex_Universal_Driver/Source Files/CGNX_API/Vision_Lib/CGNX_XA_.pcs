@@ -29,7 +29,7 @@ Function CGNX_XA(ByVal srvID As Integer, ByVal stepID As Integer,_
 
 	sendMsg = Sprintf("XA,%d,%s,%f,%f,%f,%f,%f,%f",_
 					  stepID, resultMode, xVal, yVal,_
-					  zVal, rxVal, ryVal, rzVal)
+					  zVal, rzVal, ryVal, rxVal)
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_XA = Split(recvMsg, ",")
 
