@@ -3,28 +3,37 @@
 #Include "CGNX_API.h"
 
 '
-'
+'Convert Integer to String
 '
 Function Int2Str(ByVal num As Integer) As String
 	Int2Str = Trim(Str(num))
 End Function
 
 '
-'
+'Convert Double to String
 '
 Function Dob2Str(ByVal num As Double) As String
 	Dob2Str = Trim(Str(num))
 End Function
 
 '
-'
+'Convert Single to String
 '
 Function Sng2Str(ByVal num As Single) As String
 	Sng2Str = Trim(Str(num))
 End Function
 
 '
+'Convert CurPos to String (format: x,y,z,rz,ry,rx)
 '
+Function CurPos2Str() As String
+	CurPos2Str = Sprintf("%f,%f,%f,%f,%f,%f",_
+				 PosX(CurPos), PosY(CurPos), PosZ(CurPos),_
+				 PosRZ(CurPos), PosRY(CurPos), PosRX(CurPos))
+End Function
+
+'
+'Check that Command is ment for the right function
 '
 Function checkInputData(ByVal inputData As Variant, ByVal setData As String) As String
 	If inputData = setData Then 
