@@ -21,7 +21,36 @@
 #Include "Comm\CGNX_SendCmd_.pcs"
 
 '========================================================================================
-'Cognex API Function(For function details, refer to Cognex Robot Library manual.)
+'Cognex Vision Library Functions(For function details, refer to Cognex Robot Library manual.)
+'========================================================================================
+#Include "Vision_Lib\CGNX_ACB_.pcs"
+#Include "Vision_Lib\CGNX_AC_.pcs"
+#Include "Vision_Lib\CGNX_HEB_.pcs"
+#Include "Vision_Lib\CGNX_HE_.pcs"
+#Include "Vision_Lib\CGNX_HEE_.pcs"
+#Include "Vision_Lib\CGNX_TT_.pcs"
+#Include "Vision_Lib\CGNX_TTR_.pcs"
+#Include "Vision_Lib\CGNX_XT_.pcs"
+#Include "Vision_Lib\CGNX_TA_.pcs"
+#Include "Vision_Lib\CGNX_XA_.pcs"
+#Include "Vision_Lib\CGNX_XTN_.pcs"
+#Include "Vision_Lib\CGNX_XT2_.pcs"
+#Include "Vision_Lib\CGNX_IC_.pcs"
+#Include "Vision_Lib\CGNX_CS_.pcs"
+
+'Convenience Functions
+#Include "Vision_Lib\CGNX_AutoCalib_.pcs"
+#Include "Vision_Lib\CGNX_HECalib2D_.pcs"
+#Include "Vision_Lib\CGNX_HECalibration_.pcs"
+#Include "Vision_Lib\CGNX_TrainVGRTarget_.pcs"
+#Include "Vision_Lib\CGNX_TrainVGRMotion_.pcs"
+#Include "Vision_Lib\CGNX_RunVGR_.pcs"
+#Include "Vision_Lib\CGNX_RunVGRPicked_.pcs"
+#Include "Vision_Lib\CGNX_TrainAlign_.pcs"
+#Include "Vision_Lib\CGNX_RunAlign_.pcs"
+
+'========================================================================================
+'Cognex Vision HMI Functions(For function details, refer to Cognex Robot Library manual.)
 '======================================================================================== 
 #Include "Vision_HMI\CGNX_SS_.pcs"
 #Include "Vision_HMI\CGNX_GS_.pcs"
@@ -31,6 +60,11 @@
 #Include "Vision_HMI\CGNX_SO_.pcs"
 #Include "Vision_HMI\CGNX_MJ_.pcs"
 #Include "Vision_HMI\CGNX_GV_.pcs"
+
+'Application Commands
+#Include "Vision_HMI\CGNX_CAL_.pcs"
+#Include "Vision_HMI\CGNX_TVGR_.pcs"
+#Include "Vision_HMI\CGNX_XVGR_.pcs"
 
 '========================================================================================
 'Utility Functions
