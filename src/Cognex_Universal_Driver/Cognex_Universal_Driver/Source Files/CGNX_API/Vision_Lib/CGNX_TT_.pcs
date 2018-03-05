@@ -15,6 +15,9 @@ Sub Main
 					   PosRz(CurPos),PosRy(CurPos),PosRz(CurPos))
 End Sub
 
+'
+'Registers Target Feature (Golden Pose Training)
+'
 Function CGNX_TT(ByVal srvID As Integer, ByVal stepID As Integer,_
 				 ByVal xVal As Double, ByVal yVal As Double,_
 				 ByVal zVal As Double, ByVal rzVal As Double,_
