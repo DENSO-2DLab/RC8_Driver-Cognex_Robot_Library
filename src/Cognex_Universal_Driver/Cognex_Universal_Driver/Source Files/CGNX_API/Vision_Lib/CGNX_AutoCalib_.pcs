@@ -2,10 +2,6 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
-	
-End Sub
-
 '
 ' AutoCalibration Feature (Convenience Function)
 '
@@ -17,10 +13,9 @@ Sub CGNX_AutoCalib(ByVal srvID As Integer, ByVal cam As Integer,_
 	Dim breakCondition As Integer = Off
 
 	nextPos = CurPos
-
+	
+	recvMsg = CGNX_ACB(srvID, cam, targetID)
 	Do 
-		recvMsg = CGNX_ACB(srvID, cam, targetID)
-
 		Select Case recvMsg(1)
 			Case 2
 				'Success, Continue
@@ -28,9 +23,11 @@ Sub CGNX_AutoCalib(ByVal srvID As Integer, ByVal cam As Integer,_
 				LetY nextPos = recvMsg(3)
 				LetRz nextPos = recvMsg(5)
 
+				Takearm
 				Move P, nextPos
 				Delay settleTime * 1000 ' Convert to Milliseconds
-			
+				
+				recvMsg = CGNX_AC(srvID, cam, targetID)
 			Case 1
 				' We are done 
 				breakCondition = On
