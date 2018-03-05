@@ -29,7 +29,7 @@ Function CGNX_ACB(ByVal srvID As Integer, ByVal cam As Integer,_
 
 	sendMsg = Sprintf("ACB,%d,%d,%f,%f,%f,%f,%f,%f",_
 					  cam, targetID, xVal, yVal, zVal,_
-					  rxVal, ryVal, rzVal)
+					  rzVal, ryVal, rxVal)
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_ACB = Split(recvMsg, ",")
 End Function
