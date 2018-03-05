@@ -10,26 +10,17 @@ Sub Main
 
 	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
-	recvMsg = CGNX_IC(_VIS_DEV_COM_,1,_
-					   PosX(CurPos),PosY(CurPos),PosZ(CurPos),_
-					   PosRz(CurPos),PosRy(CurPos),PosRx(CurPos))	
+	recvMsg = CGNX_IC(_VIS_DEV_COM_,1)	
 End Sub
 
 '
 'Perform an Intrinsic (Checkerboard) Calibration
 '
-Function CGNX_IC(ByVal srvID As Integer, ByVal cam As Integer,_
-				 ByVal xVal As Double, ByVal yVal As Double,_
-				 ByVal zVal As Double, ByVal rzVal As Double,_
-				 ByVal ryVal As Double, ByVal rxVal As Double) As Variant
-
+Function CGNX_IC(ByVal srvID As Integer, ByVal cam As Integer) As Variant
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("IC,%d,%f,%f,%f,%f,%f,%f",_
-					  cam, xVal, yVal, zVal,_
-					  rzVal, ryVal, rxVal)
+	sendMsg = Sprintf("IC,%d,%s", cam, CurPos2Str())
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_IC = Split(recvMsg, ",")
-
 End Function
