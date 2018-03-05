@@ -3,5 +3,34 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
+	Dim recvMsg As Variant
+
+	Call CGNX_DevClose(_VIS_DEV_COM_)
+	If CGNX_DevOpen(_VIS_DEV_COM_) = FAILED Then Exit Sub
+
+	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
+	recvMsg = CGNX_XA(_VIS_DEV_COM_,1,"Off",_
+					  PosX(CurPos),PosY(CurPos),PosZ(CurPos),_
+					  PosRz(CurPos),PosRy(CurPos),PosRz(CurPos))
 End Sub
+
+'
+'Locate Target Feature 
+'
+Function CGNX_XA(ByVal srvID As Integer, ByVal stepID As Integer,_
+				 ByVal resultMode As String,  xVal As Double,_
+				 ByVal yVal As Double, ByVal zVal As Double,_
+				 ByVal rzVal As Double, ByVal ryVal As Double,_
+				 ByVal rxVal As Double) As Variant
+
+	Dim sendMsg As String
+	Dim recvMsg As String
+
+	sendMsg = Sprintf("XA,%d,%s,%f,%f,%f,%f,%f,%f",_
+					  stepID, resultMode, xVal, yVal,_
+					  zVal, rxVal, ryVal, rzVal)
+	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
+	CGNX_XA = Split(recvMsg, ",")
+
+End Function
