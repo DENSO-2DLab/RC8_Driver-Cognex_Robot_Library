@@ -5,3 +5,39 @@
 Sub Main
 	
 End Sub
+
+'
+' AutoCalibration Feature (Convenience Function)
+'
+Sub CGNX_AutoCalib(ByVal srvID As Integer, ByVal cam As Integer,_
+				   ByVal targetID As Integer, ByVal settleTime As Integer)
+
+	Dim recvMsg As Variant
+	Dim nextPos As Position
+	Dim breakCondition As Integer = Off
+
+	nextPos = CurPos
+
+	Do 
+		recvMsg = CGNX_ACB(srvID, cam, targetID)
+
+		Select Case recvMsg(1)
+			Case 2
+				'Success, Continue
+				LetX nextPos = recvMsg(2)
+				LetY nextPos = recvMsg(3)
+				LetRz nextPos = recvMsg(5)
+
+				Move P, nextPos
+				Delay settleTime * 1000 ' Convert to Milliseconds
+			
+			Case 1
+				' We are done 
+				breakCondition = On
+			
+			Case Else
+				' Error
+				breakCondition = On	
+		End Select 
+	Loop Until breakCondition = On
+End Sub
