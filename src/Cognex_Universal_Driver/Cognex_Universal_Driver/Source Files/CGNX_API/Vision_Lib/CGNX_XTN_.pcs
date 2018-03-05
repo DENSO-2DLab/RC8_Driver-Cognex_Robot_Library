@@ -10,27 +10,22 @@ Sub Main
 
 	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
-	recvMsg = CGNX_XTN(_VIS_DEV_COM_,1,2,"Off",_
-					   PosX(CurPos),PosY(CurPos),PosZ(CurPos),_
-					   PosRz(CurPos),PosRy(CurPos),PosRx(CurPos))	
+	recvMsg = CGNX_XTN(_VIS_DEV_COM_,1,2,"Off")	
 End Sub
 
 '
 'Locates target (based on Max number)
 '
 Function CGNX_XTN(ByVal srvID As Integer, ByVal stepID As Integer,_
-				  ByVal maxResults As Integer, ByVal resultMode As String,_
-				  ByVal xVal As Double, ByVal yVal As Double,_
-				  ByVal zVal As Double, ByVal rzVal As Double,_
-				  ByVal ryVal As Double, ByVal rxVal As Double) As Variant
+				  ByVal maxResults As Integer,_
+				  ByVal resultMode As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("XTN,%d,%d,%s,%f,%f,%f,%f,%f,%f",_
-					  stepID, maxResults, resultMode,_
-					  xVal, yVal, zVal,_
-					  rzVal, ryVal, rxVal)
+	sendMsg = Sprintf("XTN,%d,%d,%s,%s",_
+					  stepID, maxResults,_
+					  resultMode, CurPos2Str())
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_XTN = Split(recvMsg, ",")
 End Function
