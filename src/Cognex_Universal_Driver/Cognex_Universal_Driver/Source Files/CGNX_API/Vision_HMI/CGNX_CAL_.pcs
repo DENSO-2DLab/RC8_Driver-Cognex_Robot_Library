@@ -6,7 +6,7 @@
 'Calibrate Robot/Camera
 '
 Function CGNX_CAL(ByVal recvCmd As Variant) As String
-	Dim responseMsg(1) As Variant
+	Dim fResult As Integer 
 
 	If checkInputData(recvCmd(0), "CAL") = Int2Str(FAILED) Then 
 		CGNX_CAL = "CAL," + Int2Str(FAILED)
@@ -14,11 +14,11 @@ Function CGNX_CAL(ByVal recvCmd As Variant) As String
 	End If
 
 	On Error GoTo ErrorHandler
-'		TakeArm
-'		Move P, P1
-'		Call CGNX_AutoCalib(_VIS_DEV_COM_,Val(recvCmd(1)),0,0.5)
+		TakeArm
+		Move P, P1
+		fResult = CGNX_AutoCalib(_VIS_DEV_COM_,Val(recvCmd(1)),0,0.5)
 
-		CGNX_CAL = recvCmd(0) + "," + Int2Str(SUCCEEDED)
+		CGNX_CAL = recvCmd(0) + "," + Int2Str(fResult)
 	Exit Function
 
 	ErrorHandler:
