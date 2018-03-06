@@ -2,20 +2,26 @@
 
 #Include "..\CGNX_API.pcs"
 
+Sub Main
+'	I0 = CGNX_AutoCalib(_VIS_DEV_COM_, 1, 1, 1)
+End Sub
+
 '
 ' AutoCalibration Feature (Convenience Function)
 '
-Sub CGNX_AutoCalib(ByVal srvID As Integer, ByVal cam As Integer,_
-				   ByVal targetID As Integer, ByVal settleTime As Integer)
+Function CGNX_AutoCalib(ByVal srvID As Integer,_
+						ByVal cam As Integer,_
+				   		ByVal targetID As Integer,_
+						ByVal settleTime As Integer) As Integer
 
 	Dim recvMsg As Variant
 	Dim nextPos As Position
-	Dim breakCondition As Integer = Off
-
 	nextPos = CurPos
 	
+	CGNX_AutoCalib = FAILED
 	recvMsg = CGNX_ACB(srvID, cam, targetID)
 	Do 
+		PrintMsg "AutoCalib Status: " + recvMsg(1)
 		Select Case recvMsg(1)
 			Case 2
 				'Success, Continue
@@ -30,11 +36,11 @@ Sub CGNX_AutoCalib(ByVal srvID As Integer, ByVal cam As Integer,_
 				recvMsg = CGNX_AC(srvID, cam, targetID)
 			Case 1
 				' We are done 
-				breakCondition = On
+				CGNX_AutoCalib = SUCCEEDED
 			
 			Case Else
 				' Error
-				breakCondition = On	
+				Exit Do
 		End Select 
-	Loop Until breakCondition = On
-End Sub
+	Loop Until CGNX_AutoCalib = SUCCEEDED
+End Function
