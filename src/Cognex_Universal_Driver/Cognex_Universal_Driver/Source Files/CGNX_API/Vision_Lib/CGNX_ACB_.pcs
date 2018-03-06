@@ -15,12 +15,3 @@ Function CGNX_ACB(ByVal srvID As Integer, ByVal cam As Integer,_
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_ACB = Split(recvMsg, ",")
 End Function
-l targetID As Integer) As Variant
-
-	Dim sendMsg As String
-	Dim recvMsg As String
-
-	sendMsg = Sprintf("ACB,%d,%d,%s", cam, targetID, CurPos2Str())
-	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
-	CGNX_ACB = Split(recvMsg, ",")
-End Function
