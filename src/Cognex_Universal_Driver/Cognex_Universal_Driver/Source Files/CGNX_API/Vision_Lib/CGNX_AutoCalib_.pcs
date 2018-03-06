@@ -8,7 +8,7 @@
 Function CGNX_AutoCalib(ByVal srvID As Integer,_
 						ByVal cam As Integer,_
 				   		ByVal targetID As Integer,_
-						ByVal settleTime As Integer) As Integer
+						ByVal settleTime As Single) As Integer
 
 	Dim recvMsg As Variant
 	Dim nextPos As Position
