@@ -40,7 +40,7 @@ Function CGNX_HECalib2D(ByVal srvID As Integer,_
 	startPos = CurPos
 	movePos = startPos
 
-	'Translation Loop
+	'Translation Moves
 	For yIndex = 0 To (numPosY - 1)
 		LetY movePos = PosY(startPos) + (yIndex * stepSizeY)
 		For xIndex = 0 To (numPosX - 1)
@@ -74,5 +74,4 @@ Function CGNX_HECalib2D(ByVal srvID As Integer,_
 	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
 	
 	CGNX_HECalib2D = SUCCEEDED	
-End Function
-						
+End Function		
