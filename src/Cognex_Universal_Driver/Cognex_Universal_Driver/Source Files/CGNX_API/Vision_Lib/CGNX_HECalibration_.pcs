@@ -5,3 +5,37 @@
 Sub Main
 	
 End Sub
+
+'
+'Perform Handeye Calibration (General)
+'
+Function CGNX_HECalibration(ByVal srvID As Integer,_
+							ByVal cam As Integer,_
+							ByVal targetID As Integer,_
+							ByVal settleTime As Single,_
+							ByVal numPos As Integer,_
+							ByVal startPoseIndex As Integer) As Integer
+	
+	Dim recvMsg As Variant
+	
+	'Loop Counter
+	Dim poseIndex As Integer = 0
+
+	CGNX_HECalibration = FAILED
+
+	recvMsg = CGNX_HEB(srvID,cam)
+	if recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+
+	'Move through Positions
+	For poseIndex = 0 To (numPos - 1)
+		TakeArm
+		Move P, P[startPoseIndex + poseIndex]
+		Delay settleTime * 1000	' Convert to Millisecons
+
+		recvMsg = CGNX_HE(srvID, cam, targetID)
+		if recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+	Next poseIndex
+		
+	recvMsg = CGNX_HEE(srvID, cam)
+	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+End Function
