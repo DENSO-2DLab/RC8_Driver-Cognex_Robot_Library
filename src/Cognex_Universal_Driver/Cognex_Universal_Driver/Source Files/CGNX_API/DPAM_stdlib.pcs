@@ -2,6 +2,10 @@
 
 #Include "CGNX_API.h"
 
+'========================================================================================
+' Conversion- Variable 2 String 
+'========================================================================================
+
 '
 'Convert Integer to String
 '
@@ -31,6 +35,103 @@ Function CurPos2Str() As String
 				 PosX(CurPos), PosY(CurPos), PosZ(CurPos),_
 				 PosRZ(CurPos), PosRY(CurPos), PosRX(CurPos))
 End Function
+
+'========================================================================================
+' Conversion - String 2 Variable
+'========================================================================================
+
+'
+'Convert String (format: x,y,z,rz,ry,rx) to Position Type 
+'
+Function Str2Pos(ByVal posStr As String) As Position
+	Dim strElements As Variant
+	strElements = split(posStr, ",")
+
+	LetX Str2Pos = Val(strElements(0))
+	LetY Str2Pos = Val(strElements(1))
+	LetZ Str2Pos = Val(strElements(2))
+	LetRx Str2Pos = Val(strElements(5))
+	LetRy Str2Pos = Val(strElements(4))
+	LetRz Str2Pos = Val(strElements(3))
+	LetF Str2Pos = -1
+End Function
+
+'========================================================================================
+' Conversion - Other
+'========================================================================================
+
+'
+'Convert from Second to Millisecons
+'
+Function Sec2Millis(ByVal timeInSeconds As Single) As Single
+	Sec2Millis = timeInSeconds * 1000
+End Function
+
+'========================================================================================
+' Robot Motion
+'========================================================================================
+
+'
+'Move to a Position
+'
+Sub Move2Point(targetPos As Position)
+	TakeArm Keep = 1
+	Move P, targetPos
+End Sub
+
+'
+'Move to a Position and add settle time
+'
+Sub Move2PointAndSettle(targetPos As Position, settleTime as Single)
+	TakeArm Keep = 1
+	Move P, targetPos
+	Delay Sec2Millis(settleTime)
+End Sub
+
+'
+'Pick Part
+'
+Sub MoveAndPickPart(targetPos As Position)
+	TakeArm Keep = 1
+	Call ReleasePart
+	Approach P, targetPos, 100
+	Move L, targetPos
+	Call GrabPart
+	Depart L, 100
+End Sub
+
+'
+'Place Part
+'
+Sub MoveAndPlacePart(targetPos As Position)
+	TakeArm Keep = 1
+	Approach P, targetPos, 100
+	Move L, targetPos
+	Call ReleasePart
+	Depart L, 100
+End Sub
+
+'========================================================================================
+' EOAT Actions
+'========================================================================================
+
+'
+' Grab Part
+'
+Sub GrabPart()
+	'Run Grap Part Commands
+End Sub
+
+'
+' Release Part
+'
+Sub ReleasePart()
+	'Run Release Part Commands
+End Sub
+
+'========================================================================================
+' Data Validation
+'========================================================================================
 
 '
 'Check that Command is ment for the right function
