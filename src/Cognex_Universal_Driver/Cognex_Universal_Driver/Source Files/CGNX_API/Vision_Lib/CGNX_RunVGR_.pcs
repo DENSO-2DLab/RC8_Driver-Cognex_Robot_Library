@@ -3,5 +3,20 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
-	
+	I0 = CGNX_RunVGR(_VIS_DEV_COM_,1,"Off")
 End Sub
+
+'
+'Run selected VGR Step
+'
+Function CGNX_RunVGR(ByVal srvID As Integer,_
+					 ByVal stepID As Integer,_
+					 ByVal resultMode As String) As Integer
+
+	Dim recvMsg As Variant
+	CGNX_RunVGR = FAILED
+	recvMsg = CGNX_XT(srvID, stepID, resultMode)
+
+	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+	CGNX_RunVGR = SUCCEEDED
+End Function
