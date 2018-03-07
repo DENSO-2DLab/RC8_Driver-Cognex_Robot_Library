@@ -3,5 +3,26 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
+	Dim recvMsg As Variant
+
+	Call CGNX_DevClose(_VIS_DEV_COM_)
+	If CGNX_DevOpen(_VIS_DEV_COM_) = FAILED Then Exit Sub
+
+	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
+	recvMsg = CGNX_CS(_VIS_DEV_COM_,1,2)	
 End Sub
+
+'
+'Attaches a non-HE calib cam to the calibration of a HE calib cam
+'
+Function CGNX_CS(ByVal srvID As Integer, ByVal heCam As Integer,_
+				 ByVal nonHeCam As Integer) As Variant
+
+	Dim sendMsg As String
+	Dim recvMsg As String
+
+	sendMsg = Sprintf("CS,%d,%d", heCam, nonHeCam)
+	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
+	CGNX_CS = Split(recvMsg, ",")
+End Function
