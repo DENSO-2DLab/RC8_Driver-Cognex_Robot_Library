@@ -2,10 +2,6 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
-	I0 = CGNX_HECalib2D(_VIS_DEV_COM_,1,1,1,5,0.5,5,0.5,5,1,10)
-End Sub
-
 '
 'Perform Handeye Calibration 2D
 '
