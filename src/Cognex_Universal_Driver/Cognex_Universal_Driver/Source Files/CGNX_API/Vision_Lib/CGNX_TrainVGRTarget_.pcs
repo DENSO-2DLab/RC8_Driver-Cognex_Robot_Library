@@ -3,5 +3,19 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
-	
+	I0 = CGNX_TrainVGRTarget(_VIS_DEV_COM_,1)
 End Sub
+
+'
+'Register Golden Position (Target)
+'
+Function CGNX_TrainVGRTarget(ByVal srvID As Integer,_
+							 ByVal stepID As Integer) As Integer
+
+	Dim recvMsg As Variant
+	CGNX_TrainVGRTarget = FAILED
+	recvMsg = CGNX_TT(srvID, stepID)
+
+	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+	CGNX_TrainVGRTarget = SUCCEEDED
+End Function
