@@ -10,7 +10,8 @@ End Sub
 'Execute Step 
 '
 Function CGNX_XVGR(ByVal recvCmd As Variant) As String
-	Dim fResult(1) As Variant
+	Dim fResult As Variant
+	Dim tempPos As Position
 
 	CGNX_XVGR = "XVGR," + Int2Str(FAILED)
 	If checkInputData(recvCmd(0), "XVGR") = Int2Str(FAILED) Then 
@@ -21,24 +22,25 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 		'Check StepID
 		Select Case Val(recvCmd(1))
 			Case 1
-				TakeArm 
-				Move P, P0
-
+				Call Move2Point(P0)
+				
+				TakeArm Keep = 1
 				Tool 1, ToolPos(0)	'Initialize Tool 1
 
 				fResult = CGNX_RunVGR(_VIS_DEV_COM_,1,0)
 				If fResult(0)  = FAILED Then
 					Exit Function
 				End If 
+				
+				tempPos = fResult(1)
+				Call Move2Point(P2)
+				P2 = P2 + tempPos
 
-				Move P, P2
-				P2 = P2 + fResult(1)
-
-				' Pick Part
+				'Pick Part
+				'Call PickPart(P2 + fResult(1))
 
 			Case 2 'Target On Gripper
-				TakeArm 
-				Move P, P3
+				Call Move2Point(P3)
 
 				If CGNX_RunVGRPicked(_VIS_DEV_COM_,2,1) = FAILED Then
 					Exit Function
@@ -49,13 +51,11 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 				If fResult(0) = FAILED Then
 					Exit Function
 				End If
-
-				Move P, fResult(1)
-
-				' Place Part
-				' Release Part
-
-				Move P, P0
+				
+				tempPos = fResult(1)
+				Call Move2Point(tempPos)
+				Call MoveAndPlacePart(tempPos)	' Place Part
+				Call Move2Point(P0)
 
 			Case Else
 				Exit Function
