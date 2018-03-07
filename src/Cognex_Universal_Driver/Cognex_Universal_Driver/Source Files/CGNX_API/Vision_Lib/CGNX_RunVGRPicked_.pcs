@@ -5,3 +5,23 @@
 Sub Main
 	
 End Sub
+
+'
+'Runs selected VGR step + Align provide robot tool
+'
+Function CGNX_RunVGRPicked(ByVal srvID As Integer,_
+						   ByVal stepID As Integer,_
+						   ByVal setTool As Integer) As Integer
+
+	Dim resultMode As String = "Abs"
+	
+	'Set Tool 
+	TakeArm 
+	ChangeTool setTool
+
+	CGNX_RunVGRPicked = CGNX_RunVGR(srvID, stepID, resultMode)
+	If CGNX_RunVGRPicked  = SUCCEEDED Then 
+		' Adjust Tool's position to the result pose to re-establish
+		' the trained relation between tool and target.
+	End If
+End Function
