@@ -42,10 +42,8 @@ Function CGNX_HECalib2D(ByVal srvID As Integer,_
 		For xIndex = 0 To (numPosX - 1)
 			LetX movePos = PosX(startPos) + (xIndex * stepSizeX)
 
-			TakeArm 
-			Move P, movePos
-			Delay settleTime * 1000	' Convert to Milliseconds
-
+			Call Move2PointAndSettle(movePos, settleTime)
+			
 			recvMsg = CGNX_HE(srvID, cam, targetID)
 			if recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
 		Next xIndex	' End for X...
@@ -58,10 +56,8 @@ Function CGNX_HECalib2D(ByVal srvID As Integer,_
 	For aIndex = 0 To (numPosRot - 1)
 		LetRz movePos = PosRz(movePos) + (aIndex * stepSizeAngle)
 
-		TakeArm
-		Move P, movePos
-		Delay settleTime * 1000	' Covert to Millisecons
-		
+		Call Move2PointAndSettle(movePos, settleTime)
+				
 		recvMsg = CGNX_HE(srvID, cam, targetID)
 		if recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
 	Next aIndex ' End for A...

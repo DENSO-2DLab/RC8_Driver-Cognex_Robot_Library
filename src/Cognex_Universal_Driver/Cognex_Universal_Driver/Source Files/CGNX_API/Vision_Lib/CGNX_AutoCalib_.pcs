@@ -17,25 +17,20 @@ Function CGNX_AutoCalib(ByVal srvID As Integer,_
 	CGNX_AutoCalib = FAILED
 	recvMsg = CGNX_ACB(srvID, cam, targetID)
 	Do 
-		PrintMsg "AutoCalib Status: " + recvMsg(1)
-		Select Case recvMsg(1)
-			Case 2
-				'Success, Continue
+		Select Case Val(recvMsg(1))
+			Case 2	'Success, Continue
+				
 				LetX nextPos = recvMsg(2)
 				LetY nextPos = recvMsg(3)
 				LetRz nextPos = recvMsg(5)
 
-				Takearm
-				Move P, nextPos
-				Delay settleTime * 1000 ' Convert to Milliseconds
-				
+				Call Move2PointAndSettle(nextPos, settleTime)
 				recvMsg = CGNX_AC(srvID, cam, targetID)
-			Case 1
-				' We are done 
+			
+			Case 1	' We are done 
 				CGNX_AutoCalib = SUCCEEDED
 			
-			Case Else
-				' Error
+			Case Else	' Error
 				Exit Do
 		End Select 
 	Loop Until CGNX_AutoCalib = SUCCEEDED

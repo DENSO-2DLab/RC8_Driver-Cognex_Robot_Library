@@ -7,7 +7,6 @@
 '
 Function CGNX_TrainVGRMotion(ByVal srvID As Integer,_
 							 ByVal stepID As Integer) As Integer
-
 	Dim recvMsg As Variant
 	CGNX_TrainVGRMotion = FAILED
 	recvMsg = CGNX_TTR(srvID, stepID)

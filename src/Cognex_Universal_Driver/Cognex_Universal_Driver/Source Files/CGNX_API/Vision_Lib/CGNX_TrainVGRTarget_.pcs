@@ -7,7 +7,6 @@
 '
 Function CGNX_TrainVGRTarget(ByVal srvID As Integer,_
 							 ByVal stepID As Integer) As Integer
-
 	Dim recvMsg As Variant
 	CGNX_TrainVGRTarget = FAILED
 	recvMsg = CGNX_TT(srvID, stepID)
