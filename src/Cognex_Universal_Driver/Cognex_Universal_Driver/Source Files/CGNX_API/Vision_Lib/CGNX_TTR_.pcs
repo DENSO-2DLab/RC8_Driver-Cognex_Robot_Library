@@ -3,5 +3,26 @@
 #Include "..\CGNX_API.pcs"
 
 Sub Main
+	Dim recvMsg As Variant
+
+	Call CGNX_DevClose(_VIS_DEV_COM_)
+	If CGNX_DevOpen(_VIS_DEV_COM_) = FAILED Then Exit Sub
+
+	Comm.Clear _VIS_DEV_COM_ 			'Clear the reception buffer
 	
+	recvMsg = CGNX_TTR(_VIS_DEV_COM_,1)
 End Sub
+
+'
+'Register Golden Robot Pose (For Target)
+'
+Function CGNX_TTR(ByVal srvID As Integer,_
+				  ByVal stepID As Integer) As Variant
+
+	Dim sendMsg As String
+	Dim recvMsg As String
+
+	sendMsg = Sprintf("TTR,%d,%s", stepID, CurPos2Str())
+	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
+	CGNX_TTR = Split(recvMsg, ",")
+End Function

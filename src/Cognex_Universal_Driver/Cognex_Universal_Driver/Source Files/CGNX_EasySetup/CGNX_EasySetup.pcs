@@ -47,10 +47,10 @@ Sub Main
 				sendMsg = CGNX_CAL(recvMsg)
 			Case "TVGR"
 				' Train Step
-				'sendMsg = CGNX_TVGR(recvMsg)
+				sendMsg = CGNX_TVGR(recvMsg)
 			Case "XVGR"
 				' Execute Step
-				'sendMsg = CGNX_XVGR(recvMsg)
+				sendMsg = CGNX_XVGR(recvMsg)
 			Case Else
 				' Not Supported
 		End Select

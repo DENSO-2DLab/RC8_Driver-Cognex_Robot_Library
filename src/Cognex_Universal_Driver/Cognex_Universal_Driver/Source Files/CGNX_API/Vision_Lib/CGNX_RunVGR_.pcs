@@ -1,7 +1,44 @@
 '!TITLE "Denso robot program"
 
 #Include "..\CGNX_API.pcs"
+#Include <Variant.h>
 
 Sub Main
-	
+	Dim fResult As Variant
+
+	fResult = CGNX_RunVGR(_VIS_DEV_COM_,1,1)
+
+	I0 = fResult(0)
+	P10 = fResult(1)
 End Sub
+
+'
+'Run selected VGR Step
+'
+Function CGNX_RunVGR(ByVal srvID As Integer,_
+					 ByVal stepID As Integer,_
+					 ByVal resultMode As Integer) As Variant
+
+	Dim recvMsg As Variant
+	Dim posStr As String
+	Dim posResult As Position
+
+	CGNX_RunVGR = CreateArray(2,VT_VARIANT)
+
+	'Initialize Return Value 
+	CGNX_RunVGR(0) = FAILED
+	CGNX_RunVGR(1) = posResult
+
+	recvMsg = CGNX_XT(srvID, stepID, resultMode)
+	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+
+	posStr = Sprintf("%f,%f,%f,%f,%f,%f",_
+					 recvMsg(2), recvMsg(3), recvMsg(4),_
+					 recvMsg(5), recvMsg(6), recvMsg(7))
+
+	posResult = Str2Pos(posStr)
+	
+	'Return Success Message 
+	CGNX_RunVGR(0) = SUCCEEDED
+	CGNX_RunVGR(1) = posResult
+End Function

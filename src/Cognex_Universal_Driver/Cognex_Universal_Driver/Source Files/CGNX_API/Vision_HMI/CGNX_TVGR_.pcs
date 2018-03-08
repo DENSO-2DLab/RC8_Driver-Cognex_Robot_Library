@@ -5,3 +5,74 @@
 Sub Main
 	
 End Sub
+
+'
+'Train Step
+'
+Function CGNX_TVGR(ByVal recvCmd As Variant) As String
+	Dim fResult As Integer
+
+	'Initialize Return Value
+	CGNX_TVGR = "TVGR" + "," + Int2Str(FAILED)
+
+	If checkInputData(recvCmd(0), "TVGR") = Int2Str(FAILED) Then
+		Exit Function
+	End If
+
+	On Error GoTo ErrorHandler
+		
+		'Get StepID
+		Select Case Val(recvCmd(1))	
+			Case 1 ' Target on Gripper
+				TakeArm
+				Move P, P2
+
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,1) = FAILED Then 
+					Exit Function
+				End If
+
+				' Release Target
+
+				Move P, P0
+
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,1) = FAILED Then
+					Exit Function
+				End If
+
+			Case 2 ' Target on Gripper (No Release)
+				TakeArm 
+				Move P, P3
+
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,2) = FAILED Then
+					Exit Function
+				End If
+
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,2) = FAILED Then
+					Exit Function
+				End If
+
+			Case 3 ' Target in Golden Place Position
+				TakeArm
+				Move P, P0
+
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_, 3) = FAILED Then 
+					Exit Function
+				End If
+
+				Move P, P4
+
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_, 3) = FAILED Then
+					Exit Function
+				End If
+
+			Case Else
+				Exit Function
+		End Select
+	
+		'Return Success Message
+		CGNX_TVGR = "TVGR" + "," + Int2Str(SUCCEEDED)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber & ": " & err.Description
+End Function
