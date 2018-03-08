@@ -2,10 +2,6 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
-	
-End Sub
-
 '
 'Execute Step 
 '

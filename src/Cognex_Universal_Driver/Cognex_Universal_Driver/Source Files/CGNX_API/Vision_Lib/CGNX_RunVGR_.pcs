@@ -1,16 +1,6 @@
 '!TITLE "Denso robot program"
 
 #Include "..\CGNX_API.pcs"
-#Include <Variant.h>
-
-Sub Main
-	Dim fResult As Variant
-
-	fResult = CGNX_RunVGR(_VIS_DEV_COM_,1,1)
-
-	I0 = fResult(0)
-	P10 = fResult(1)
-End Sub
 
 '
 'Run selected VGR Step

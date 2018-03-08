@@ -2,10 +2,6 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
-	I0 = CGNX_TrainVGRMotion(_VIS_DEV_COM_,1)	
-End Sub
-
 '
 'Register Golden Pose (Robot CurPos)
 '
