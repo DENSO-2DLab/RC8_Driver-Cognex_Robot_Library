@@ -11,7 +11,7 @@ Function CGNX_GV(ByVal recvCmd As Variant) As String
 
 	On Error GoTo ErrorHandler	
 		' Get API Version
-		CGNX_GV = Sprintf("%s,%d,%d", recvCmd(0),_
+		CGNX_GV = Sprintf("%s,%d,%s", recvCmd(0),_
 						  SUCCEEDED, CGNX_API_VER)
 	Exit Function
 			
