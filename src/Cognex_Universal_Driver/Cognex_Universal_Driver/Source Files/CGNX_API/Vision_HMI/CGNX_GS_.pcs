@@ -6,24 +6,14 @@
 'Get Speed
 '
 Function CGNX_GS(ByVal recvCmd As Variant) As String
-	Dim responseMsg(2) As Variant 
-
-	If checkInputData(recvCmd(0), "GS") = Int2Str(FAILED) Then 
-		CGNX_GS = "GS," + Int2Str(FAILED)
-		Exit Function
-	End If
+	CGNX_GS = Sprintf("GS,%d", FAILED)
+	If checkInputData(recvCmd(0), "GS") = FAILED Then Exit Function
 
 	On Error GoTo ErrorHandler
-
 		'Get current external speed
-		responseMsg(0) = recvCmd(0)
-		responseMsg(1) = Int2Str(SUCCEEDED)
-		responseMsg(2) = Sng2Str(CurExtSpd)
-		CGNX_GS = Join(responseMsg, ",")
-
-		Exit Function
+		CGNX_GS = Sprintf("%s,%d,%f", recvCmd(0), SUCCEEDED, CurExtSpd)
+	Exit Function
 
 	ErrorHandler:
-		CGNX_GS = recvCmd(0) + "," + Int2Str(FAILED)
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function
