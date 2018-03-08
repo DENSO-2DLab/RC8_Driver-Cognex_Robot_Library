@@ -6,12 +6,8 @@
 'Set Speed
 '
 Function CGNX_SS(ByVal recvCmd As Variant) As String
-	Dim responseMsg(1) As Variant
-	
-	If checkInputData(recvCmd(0), "SS") = Int2Str(FAILED) Then 
-		CGNX_SS = "SS," + Int2Str(FAILED)
-		Exit Function
-	End If
+	CGNX_SS = Sprintf("SS,%d", FAILED)
+	If checkInputData(recvCmd(0), "SS") = FAILED Then Exit Function
 
 	On Error GoTo ErrorHandler
 		' Set External Speed		
@@ -19,16 +15,10 @@ Function CGNX_SS(ByVal recvCmd As Variant) As String
 
 		' Verify that External Speed changed to new value
 		If CurExtSpd = Val(recvCmd(1)) Then 
-			responseMsg(0) = recvCmd(0)
-			responseMsg(1) = Int2Str(SUCCEEDED)
-			CGNX_SS = Join(responseMsg, ",")
-		Else
-			CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)			
+			CGNX_SS = Sprintf("%s,%d", recvCmd(0), SUCCEEDED)
 		End If
-		
-		Exit Function
+	Exit Function
 	
 	ErrorHandler:
-		CGNX_SS = recvCmd(0) + "," + Int2Str(FAILED)
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function

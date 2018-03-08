@@ -36,6 +36,16 @@ Function CurPos2Str() As String
 				 PosRZ(CurPos), PosRY(CurPos), PosRX(CurPos))
 End Function
 
+'
+'Convert CurJnt to String
+'
+Function CurJnt2Str() As String
+	CurJnt2Str = Sprintf("%f,%f,%f,%f,%f,%f",_
+						Joint(1, CurJnt), Joint(2, CurJnt),_
+						Joint(3, CurJnt), Joint(4, CurJnt),_
+						Joint(5, CurJnt), Joint(6, CurJnt))
+End Function
+
 '========================================================================================
 ' Conversion - String 2 Variable
 '========================================================================================
@@ -136,11 +146,11 @@ End Sub
 '
 'Check that Command is ment for the right function
 '
-Function checkInputData(ByVal inputData As Variant, ByVal setData As String) As String
+Function checkInputData(ByVal inputData As Variant, ByVal setData As String) As Integer
 	If inputData = setData Then 
-		checkInputData = Int2Str(SUCCEEDED)
+		checkInputData = SUCCEEDED
 	Else
 		MsgBox("Input data is incorrect")
-		checkInputData = Int2Str(FAILED)
+		checkInputData = FAILED
 	End If
 End Function

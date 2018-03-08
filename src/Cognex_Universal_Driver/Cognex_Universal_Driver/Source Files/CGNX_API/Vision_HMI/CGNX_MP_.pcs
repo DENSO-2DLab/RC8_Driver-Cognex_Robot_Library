@@ -6,35 +6,18 @@
 ' Move to Point (P Variable)
 ' 
 Function CGNX_MP(ByVal recvCmd As Variant) As String
-	Dim responseMsg(7) As Variant 
-
-	If checkInputData(recvCmd(0), "MP") = Int2Str(FAILED) Then 
-		CGNX_MP = "MP," + Int2Str(FAILED)
-		Exit Function
-	End If
+	CGNX_MP = Sprintf("MP,%d", FAILED)
+	If checkInputData(recvCmd(0), "MP") = FAILED Then Exit Function
 
 	On Error GoTo ErrorHandler
-		
 		'Move to Point Position
-		TakeArm Keep = 1
-		Speed 100
-		Move P, @E P[Val(recvCmd(1))]
-		GiveArm
+		Call Move2Point(P[Val(recvCmd(1))])
 
 		'Send Response
-		responseMsg(0) = recvCmd(0)
-		responseMsg(1) = Int2Str(SUCCEEDED)
-		responseMsg(2) = Dob2Str(PosX(CurPos))
-		responseMsg(3) = Dob2Str(PosY(CurPos))
-		responseMsg(4) = Dob2Str(PosZ(CurPos))
-		responseMsg(5) = Dob2Str(PosRz(CurPos))
-		responseMsg(6) = Dob2Str(PosRy(CurPos))
-		responseMsg(7) = Dob2Str(PosRx(CurPos))
-		CGNX_MP = Join(responseMsg, ",")
-		
-		Exit Function
+		CGNX_MP = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CurPos2Str())
+	Exit Function
 
 	ErrorHandler:
-		CGNX_MP = recvCmd(0) + "," + Int2Str(FAILED)
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function

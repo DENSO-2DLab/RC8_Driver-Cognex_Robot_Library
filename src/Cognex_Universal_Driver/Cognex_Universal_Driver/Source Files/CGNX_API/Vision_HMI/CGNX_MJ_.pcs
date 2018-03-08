@@ -6,16 +6,12 @@
 'Move Relative (Joint Type)
 ' 
 Function CGNX_MJ(ByVal recvCmd As Variant) As String
-	Dim responseMsg(7) As Variant
-	Dim relRobPos As Joint
-
-	If checkInputData(recvCmd(0), "MJ") = Int2Str(FAILED) Then 
-		CGNX_MJ = "MJ," + Int2Str(FAILED)
-		Exit Function
-	End If
+	CGNX_MJ = Sprintf("MJ,%d", FAILED)
+	If checkInputData(recvCmd(0), "MJ") = FAILED Then Exit Function
 
 	On Error GoTo ErrorHandler
-
+		Dim relRobPos As Joint
+		
 		'Joint Offets
 		LetJ 1, relRobPos = Joint(1, CurJnt) + Val(recvCmd(1))
 		LetJ 2, relRobPos = Joint(2, CurJnt) + Val(recvCmd(2))
@@ -25,24 +21,13 @@ Function CGNX_MJ(ByVal recvCmd As Variant) As String
 		LetJ 6, relRobPos = Joint(6, CurJnt) + Val(recvCmd(6))
 
 		'Do Relative Move
-		TakeArm Keep = 1
-		Speed 100
-		Move P, @E relRobPos
-		GiveArm
-
+		Call Move2Point(J2P(relRobPos))
+		
 		'Send Response
-		responseMsg(0) = recvCmd(0)
-		responseMsg(1) = Int2Str(SUCCEEDED)
-		responseMsg(2) = Dob2Str(Joint(1, CurJnt))
-		responseMsg(3) = Dob2Str(Joint(2, CurJnt))
-		responseMsg(4) = Dob2Str(Joint(3, CurJnt))
-		responseMsg(5) = Dob2Str(Joint(4, CurJnt))
-		responseMsg(6) = Dob2Str(Joint(5, CurJnt))
-		responseMsg(7) = Dob2Str(Joint(6, CurJnt))
-		CGNX_MJ = Join(responseMsg, ",")
-		Exit Function
+		CGNX_MJ = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CurJnt2Str())
+	Exit Function
 
 	ErrorHandler:
-		CGNX_MJ = recvCmd(0) + "," + Int2Str(FAILED)
 		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
 End Function

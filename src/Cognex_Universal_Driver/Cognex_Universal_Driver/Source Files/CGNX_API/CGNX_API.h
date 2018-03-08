@@ -3,6 +3,6 @@
 #Define _VIS_HMI_COM_ 8
 #Define _VIS_DEV_COM_ 9
 
-#Define CGNX_API_VER	"1.4.0"
+#Define CGNX_API_VER	"1.6.21"
 #Define SUCCEEDED		1
 #Define FAILED			0
