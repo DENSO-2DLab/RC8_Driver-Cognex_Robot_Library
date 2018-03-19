@@ -86,7 +86,10 @@ End Function
 '
 Sub Move2Point(targetPos As Position)
 	TakeArm Keep = 1
+	SingularAvoid(2)	'Enable Singularity Avoidance Option
+	LetF targetPos = -2	'Automatically select figure that achieves the shortest distance.
 	Move P, targetPos
+	SingularAvoid(0)
 End Sub
 
 '
@@ -94,8 +97,11 @@ End Sub
 '
 Sub Move2PointAndSettle(targetPos As Position, settleTime as Single)
 	TakeArm Keep = 1
+	SingularAvoid(2)	'Enable Singularity Avoidance Option
+	LetF targetPos = -2	'Automatically select figure that achieves the shortest distance.
 	Move P, targetPos
 	Delay Sec2Millis(settleTime)
+	SingularAvoid(0)
 End Sub
 
 '
@@ -103,11 +109,14 @@ End Sub
 '
 Sub MoveAndPickPart(targetPos As Position)
 	TakeArm Keep = 1
+	SingularAvoid(2)	'Enable Singularity Avoidance Option
+	LetF targetPos = -2	'Automatically select figure that achieves the shortest distance.
 	Call ReleasePart
 	Approach P, targetPos, 100
 	Move L, targetPos
 	Call GrabPart
 	Depart L, 100
+	SingularAvoid(0)
 End Sub
 
 '
@@ -115,10 +124,13 @@ End Sub
 '
 Sub MoveAndPlacePart(targetPos As Position)
 	TakeArm Keep = 1
+	SingularAvoid(2)	'Enable Singularity Avoidance Option
+	LetF targetPos = -2	'Automatically select figure that achieves the shortest distance.
 	Approach P, targetPos, 100
 	Move L, targetPos
 	Call ReleasePart
 	Depart L, 100
+	SingularAvoid(0)
 End Sub
 
 '========================================================================================
