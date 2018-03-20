@@ -11,9 +11,10 @@ Sub Main
 	If CGNX_DevOpen(_VIS_HMI_COM_) = FAILED Then Exit Sub
 
 	Comm.Clear _VIS_HMI_COM_ 'Clear the reception buffer
-  	Wait Comm.State(_VIS_HMI_COM_) = 2  'Wait for the connection from the client
 
 	Do
+	  	Wait Comm.State(_VIS_HMI_COM_) = 2  'Wait for the connection from the client
+
 		recvMsg = Split(CGNX_RecvCmd(_VIS_HMI_COM_),",")
 		
 		recvMsg(0) = Trim(UCase(recvMsg(0)))
@@ -57,6 +58,7 @@ Sub Main
 
 		Call CGNX_SendCmd(_VIS_HMI_COM_, sendMsg)
 		sendMsg = ""
+		Delay 100
 	Loop
 	
 End Sub
