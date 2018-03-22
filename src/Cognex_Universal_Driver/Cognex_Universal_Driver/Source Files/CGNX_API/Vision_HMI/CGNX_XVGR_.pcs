@@ -16,7 +16,7 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 		'Check StepID
 		Select Case Val(recvCmd(1))
 			Case 1
-				Call Move2Point(P0)
+				Call Move2Point(P[_TRAIN_POS_0_])
 				
 				TakeArm Keep = 1
 				Tool 1, ToolPos(0)	'Initialize Tool 1
@@ -25,14 +25,14 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 				If fResult(0)  = FAILED Then Exit Function
 				
 				tempPos = fResult(1)
-				Call Move2Point(P2)
-				P2 = P2 + tempPos
+				Call Move2Point(P[_TRAIN_POS_2_])
+				P[_TRAIN_POS_2_] = P[_TRAIN_POS_2_] + tempPos
 
 				'Pick Part
-				'Call PickPart(P2 + fResult(1))
+				'Call PickPart(P[_TRAIN_POS_2_] + fResult(1))
 
 			Case 2 'Target On Gripper
-				Call Move2Point(P3)
+				Call Move2Point(P[_TRAIN_POS_3_])
 
 				If CGNX_RunVGRPicked(_VIS_DEV_COM_,2,1) =_
 									 FAILED Then Exit Function
@@ -44,7 +44,7 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 				tempPos = fResult(1)
 				Call Move2Point(tempPos)
 				Call MoveAndPlacePart(tempPos)	' Place Part
-				Call Move2Point(P0)
+				Call Move2Point(P[_TRAIN_POS_0_])
 
 			Case Else
 				Exit Function
