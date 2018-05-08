@@ -9,7 +9,7 @@ Function CGNX_RunVGRPicked(ByVal srvID As Integer,_
 						   ByVal stepID As Integer,_
 						   ByVal setTool As Integer) As Integer
 
-	Dim resultMode As String = 1
+	Dim resultMode As String = "1"
 	
 	'Set Tool 
 	TakeArm 

@@ -7,7 +7,7 @@
 '
 Function CGNX_RunVGR(ByVal srvID As Integer,_
 					 ByVal stepID As Integer,_
-					 ByVal resultMode As Integer) As Variant
+					 ByVal resultMode As String) As Variant
 
 	Dim recvMsg As Variant
 	Dim posStr As String
