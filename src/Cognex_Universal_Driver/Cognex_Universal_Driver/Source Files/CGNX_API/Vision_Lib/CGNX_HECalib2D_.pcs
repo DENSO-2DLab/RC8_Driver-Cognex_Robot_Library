@@ -7,7 +7,7 @@
 '
 Function CGNX_HECalib2D(ByVal srvID As Integer,_
 						ByVal cam As String,_
-						ByVal targetID As Integer,_
+						ByVal targetID As String,_
 						ByVal settleTime As Single,_
 						ByVal numPosX As Integer,_
 						ByVal stepSizeX As Single,_

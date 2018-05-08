@@ -14,7 +14,7 @@ Function CGNX_CAL(ByVal recvCmd As Variant) As String
 
 		Call Move2Point(P[_TRAIN_POS_1_])
 		
-		fResult = CGNX_AutoCalib(_VIS_DEV_COM_,Str(recvCmd(1)),0,0.5)
+		fResult = CGNX_AutoCalib(_VIS_DEV_COM_,Str(recvCmd(1)),"0",0.5)
 		CGNX_CAL = Sprintf("%s,%d", recvCmd(0), fResult)
 	Exit Function
 

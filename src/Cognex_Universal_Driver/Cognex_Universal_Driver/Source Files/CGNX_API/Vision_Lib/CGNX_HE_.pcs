@@ -6,12 +6,12 @@
 'HandEye Calibration (Run)
 '
 Function CGNX_HE(ByVal srvID As Integer, ByVal cam As String,_
-				 ByVal targetID As Integer) As Variant
+				 ByVal targetID As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("HE,%s,%d,%s", cam, targetID, CurPos2Str())
+	sendMsg = Sprintf("HE,%s,%s,%s", cam, targetID, CurPos2Str())
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_HE = Split(recvMsg, ",")
 End Function
