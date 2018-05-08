@@ -21,6 +21,6 @@
 'API Data
 '========================================================================================
 
-#Define CGNX_API_VER	"1.6.27"
+#Define CGNX_API_VER	"1.6.28"
 #Define SUCCEEDED		1
 #Define FAILED			0

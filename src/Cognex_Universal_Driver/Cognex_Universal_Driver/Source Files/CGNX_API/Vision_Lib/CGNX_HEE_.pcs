@@ -5,11 +5,11 @@
 '
 'HandEye Calibration (Finish)
 '
-Function CGNX_HEE(ByVal srvID As Integer, ByVal cam As Integer) As Variant
+Function CGNX_HEE(ByVal srvID As Integer, ByVal cam As String) As Variant
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("HEE,%d",cam)
+	sendMsg = Sprintf("HEE,%s",cam)
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_HEE = Split(recvMsg, ",")
 End Function
