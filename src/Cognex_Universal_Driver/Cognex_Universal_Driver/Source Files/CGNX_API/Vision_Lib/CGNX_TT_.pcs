@@ -6,12 +6,12 @@
 'Registers Target Feature (Golden Pose Training)
 '
 Function CGNX_TT(ByVal srvID As Integer,_
-				 ByVal stepID As Integer) As Variant
+				 ByVal stepID As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("TT,%d,%s", stepID, CurPos2Str())
+	sendMsg = Sprintf("TT,%s,%s", stepID, CurPos2Str())
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_TT = Split(recvMsg, ",")
 End Function

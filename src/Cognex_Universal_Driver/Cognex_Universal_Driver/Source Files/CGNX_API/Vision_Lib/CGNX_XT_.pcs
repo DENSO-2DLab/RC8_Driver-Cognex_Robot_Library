@@ -5,13 +5,13 @@
 '
 'Locates a Target Feature
 '
-Function CGNX_XT(ByVal srvID As Integer, ByVal stepID As Integer,_
+Function CGNX_XT(ByVal srvID As Integer, ByVal stepID As String,_
 				 ByVal resultMode As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("XT,%d,%s,%s", stepID,_
+	sendMsg = Sprintf("XT,%s,%s,%s", stepID,_
 					  resultMode, CurPos2Str)
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_XT = Split(recvMsg, ",")

@@ -6,12 +6,12 @@
 'Register Golden Robot Pose (For Target)
 '
 Function CGNX_TTR(ByVal srvID As Integer,_
-				  ByVal stepID As Integer) As Variant
+				  ByVal stepID As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
 
-	sendMsg = Sprintf("TTR,%d,%s", stepID, CurPos2Str())
+	sendMsg = Sprintf("TTR,%s,%s", stepID, CurPos2Str())
 	recvMsg = CGNX_ExecuteCmd(srvID, sendMsg)
 	CGNX_TTR = Split(recvMsg, ",")
 End Function

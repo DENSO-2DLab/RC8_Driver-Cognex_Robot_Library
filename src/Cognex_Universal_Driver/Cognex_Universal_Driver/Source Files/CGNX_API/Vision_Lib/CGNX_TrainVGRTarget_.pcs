@@ -6,7 +6,7 @@
 'Register Golden Position (Target)
 '
 Function CGNX_TrainVGRTarget(ByVal srvID As Integer,_
-							 ByVal stepID As Integer) As Integer
+							 ByVal stepID As String) As Integer
 	Dim recvMsg As Variant
 	CGNX_TrainVGRTarget = FAILED
 	recvMsg = CGNX_TT(srvID, stepID)

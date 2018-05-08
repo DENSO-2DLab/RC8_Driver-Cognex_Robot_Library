@@ -17,28 +17,28 @@ Function CGNX_TVGR(ByVal recvCmd As Variant) As String
 			Case 1 ' Target on Gripper
 				Call Move2Point(P[_TRAIN_POS_2_])
 
-				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,1) =_
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"1") =_
 										FAILED Then Exit Function
 				Call ReleasePart
 				Call Move2Point(P[_TRAIN_POS_0_])
-				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,1) =_
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"1") =_
 									   FAILED Then Exit Function
 
 			Case 2 ' Target on Gripper (No Release)
 				Call Move2Point(P[_TRAIN_POS_3_])
 
-				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,2) =_
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"2") =_
 									   FAILED Then Exit Function
-				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,2) =_
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"2") =_
 									   FAILED Then Exit Function
 				
 			Case 3 ' Target in Golden Place Position
 				Call Move2Point(P[_TRAIN_POS_0_])
 
-				If CGNX_TrainVGRTarget(_VIS_DEV_COM_, 3) =_
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"3") =_
 									   FAILED Then Exit Function
 				Call Move2Point(P[_TRAIN_POS_4_])
-				If CGNX_TrainVGRMotion(_VIS_DEV_COM_, 3) =_
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"3") =_
 									   FAILED Then Exit Function
 
 			Case Else

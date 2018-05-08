@@ -6,7 +6,7 @@
 'Run selected VGR Step
 '
 Function CGNX_RunVGR(ByVal srvID As Integer,_
-					 ByVal stepID As Integer,_
+					 ByVal stepID As String,_
 					 ByVal resultMode As String) As Variant
 
 	Dim recvMsg As Variant
