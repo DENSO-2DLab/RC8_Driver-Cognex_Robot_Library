@@ -3,7 +3,6 @@
 The Cognex Provided robot function library provides high level functions that can be called from the customer's robot application program.
 
 - [Release Page](https://github.com/DENSO-2DLab/RC8_Driver-Cognex_Robot_Library/releases)
-- [Submit an Issue](https://github.com/DENSO-2DLab/RC8_Driver-Cognex_Robot_Library/issues)
 
 ### Contents
 
@@ -13,6 +12,7 @@ Driver for easy integration between Cognex Vision systems and RC8/RC8A Controlle
 
 Feel free to contribute by fixing any bugs and adding new features to this repository. 
 Once you are ready to share open a new pull request or generate an Issue. 
+- [Submit an Issue](https://github.com/DENSO-2DLab/RC8_Driver-Cognex_Robot_Library/issues)
 
 ### License 
 
