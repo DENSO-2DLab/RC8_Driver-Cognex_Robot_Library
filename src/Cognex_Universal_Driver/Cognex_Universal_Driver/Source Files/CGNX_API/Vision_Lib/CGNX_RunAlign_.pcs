@@ -2,6 +2,35 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
+'
+'Locates the target selected by the step ID and returns
+'the required position of the motion unit to align the target
+'with its trained golden position
+'
+Function CGNX_RunAlign(ByVal srvID As Integer,_
+					   ByVal stepID As String,_
+					   ByVal resultMode As String) As Variant
+
+	Dim recvMsg As Variant
+	Dim posStr As String
+	Dim posResult As String
+
+	CGNX_RunAlign = CreateArray(2, VT_VARIANT)
+
+	'Initiate Return Value
+	CGNX_RunAlign(0) = FAILED
+	CGNX_RunAlign(1) = posResult
 	
-End Sub
+	recvMsg = CGNX_XA(srvID, stepID, resultMode)
+	If recvMsg(1) <> Int2Str(SUCCEEDED) Then Exit Function
+
+	posStr = Sprintf("%f,%f,%f,%f,%f,%f",_
+				 	 recvMsg(2), recvMsg(3), recvMsg(4),_
+				 	 recvMsg(5), recvMsg(6), recvMsg(7))
+
+	posResult = Str2Pos(posStr)
+	
+	'Return Success Message
+	CGNX_RunAlign(0) = SUCCEEDED
+	CGNX_RunAlign(1) = posResult
+End Function
