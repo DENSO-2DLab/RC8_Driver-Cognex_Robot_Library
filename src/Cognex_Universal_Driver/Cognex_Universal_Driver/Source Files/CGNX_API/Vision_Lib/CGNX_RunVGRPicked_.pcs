@@ -6,10 +6,10 @@
 'Runs selected VGR step + Align provide robot tool
 '
 Function CGNX_RunVGRPicked(ByVal srvID As Integer,_
-						   ByVal stepID As Integer,_
+						   ByVal stepID As String,_
 						   ByVal setTool As Integer) As Integer
 
-	Dim resultMode As String = 1
+	Dim resultMode As String = "1"
 	
 	'Set Tool 
 	TakeArm 

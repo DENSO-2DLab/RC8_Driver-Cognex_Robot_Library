@@ -11,7 +11,7 @@ Function CGNX_MP(ByVal recvCmd As Variant) As String
 
 	On Error GoTo ErrorHandler
 		'Move to Point Position
-		Call Move2Point(P[Val(recvCmd(1))])
+		Call Move2Point(P[_TRAIN_POS_OFFSET_ + Val(recvCmd(1))])
 
 		'Send Response
 		CGNX_MP = Sprintf("%s,%d,%s", recvCmd(0),_

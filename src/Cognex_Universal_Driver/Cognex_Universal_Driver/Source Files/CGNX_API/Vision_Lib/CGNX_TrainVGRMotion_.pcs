@@ -6,7 +6,7 @@
 'Register Golden Pose (Robot CurPos)
 '
 Function CGNX_TrainVGRMotion(ByVal srvID As Integer,_
-							 ByVal stepID As Integer) As Integer
+							 ByVal stepID As String) As Integer
 	Dim recvMsg As Variant
 	CGNX_TrainVGRMotion = FAILED
 	recvMsg = CGNX_TTR(srvID, stepID)
