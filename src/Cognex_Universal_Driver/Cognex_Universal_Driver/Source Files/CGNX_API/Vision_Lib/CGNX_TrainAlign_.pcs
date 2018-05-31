@@ -2,6 +2,20 @@
 
 #Include "..\CGNX_API.pcs"
 
-Sub Main
-	
-End Sub
+'
+'Registers the golden pose of the target selected by step ID
+'
+Function CGNX_TrainAlign(ByVal srvID As Integer,_
+						 ByVal stepID As String) As Integer
+
+	Dim recvMsg As Variant
+	recvMsg = CGNX_TA(srvID, stepID)
+
+	'Initialize Return Value
+	CGNX_TrainAlign = FAILED
+
+	If recvMsg(1) = Int2Str(SUCCEEDED) Then Exit Function
+
+	'Return Success Message
+	CGNX_TrainAlign = SUCCEEDED	
+End Function
