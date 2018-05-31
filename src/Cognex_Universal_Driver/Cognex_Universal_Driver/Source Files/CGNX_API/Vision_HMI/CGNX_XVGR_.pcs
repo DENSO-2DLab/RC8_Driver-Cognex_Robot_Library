@@ -25,11 +25,12 @@ Function CGNX_XVGR(ByVal recvCmd As Variant) As String
 				If fResult(0)  = FAILED Then Exit Function
 				
 				tempPos = fResult(1)
-				Call Move2Point(P[_TRAIN_POS_2_])
-				P[_TRAIN_POS_2_] = P[_TRAIN_POS_2_] + tempPos
+				Call Move2Point(P[_TRAIN_POS_2_])		' Move to Pre-Position
+				P[_TRAIN_POS_3_] = P[_TRAIN_POS_2_] + tempPos
 
 				'Pick Part
-				'Call PickPart(P[_TRAIN_POS_2_] + fResult(1))
+				Call MoveAndPickPart(P[_TRAIN_POS_3_])	' Pick Part
+				Call Move2Point(P[_TRAIN_POS_2_])		' Move to Pre-Position
 
 			Case 2 'Target On Gripper
 				Call Move2Point(P[_TRAIN_POS_3_])
