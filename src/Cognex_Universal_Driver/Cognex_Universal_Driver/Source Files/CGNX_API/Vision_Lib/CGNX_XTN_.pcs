@@ -7,7 +7,7 @@
 '
 Function CGNX_XTN(ByVal srvID As Integer, ByVal stepID As Integer,_
 				  ByVal maxResults As Integer,_
-				  ByVal resultMode As Integer) As Variant
+				  ByVal resultMode As String) As Variant
 
 	Dim sendMsg As String
 	Dim recvMsg As String
