@@ -7,17 +7,32 @@
 '
 Function CGNX_RunVGRPicked(ByVal srvID As Integer,_
 						   ByVal stepID As String,_
-						   ByVal setTool As Integer) As Integer
+						   ByVal setTool As Integer) As Variant
 
 	Dim resultMode As String = "1"
-	
+	Dim CurPos_Trans As Position
+	Dim CurPosInv_Trans As Position
+	Dim Target_Pos As Position
+	Dim Target_Trans As Position
+	Dim fResult As Variant
+	Dim Tool_Def As Position
+
 	'Set Tool 
 	TakeArm 
 	ChangeTool setTool
 
-	CGNX_RunVGRPicked = CGNX_RunVGR(srvID, stepID, resultMode)
+	fResult = CGNX_RunVGR(srvID, stepID, resultMode)
+	Target_Pos = fResult(1)
+
 	If CGNX_RunVGRPicked  = SUCCEEDED Then 
 		' Adjust Tool's position to the result pose to re-establish
 		' the trained relation between tool and target.
+		
+		CurPos_Trans = P2T(CurPos)
+		CurPosInv_Trans = TInv(CurPos_Trans) ' Output of TTR stored in P[50+CamIdx]=curPos
+		Target_Trans = P2T(Target_Pos)
+		Tool_Def = TMul(CurPosInv_Trans, Target_Trans)	' Output of XT
+
+		Tool setTool, T2P(Tool_Def)
 	End If
 End Function
