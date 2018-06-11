@@ -9,30 +9,43 @@ Function CGNX_RunVGRPicked(ByVal srvID As Integer,_
 						   ByVal stepID As String,_
 						   ByVal setTool As Integer) As Variant
 
-	Dim resultMode As String = "1"
-	Dim CurPos_Trans As Position
-	Dim CurPosInv_Trans As Position
-	Dim Target_Pos As Position
-	Dim Target_Trans As Position
+	Dim resultMode As String = "Abs"
 	Dim fResult As Variant
-	Dim Tool_Def As Position
 
-	'Set Tool 
-	TakeArm 
-	ChangeTool setTool
+	Dim CurPos_Trans As Trans, CurPosInv_Trans As Trans, Target_Trans As Trans
+	Dim Target_Pos As Position, Tool_Def As Position
+
+	CGNX_RunVGRPicked = CreateArray(2,VT_VARIANT)
+
+	'Initialize Return Value 
+	CGNX_RunVGRPicked(0) = FAILED
+	CGNX_RunVGRPicked(1) = Tool_Def
 
 	fResult = CGNX_RunVGR(srvID, stepID, resultMode)
 	Target_Pos = fResult(1)
 
-	If CGNX_RunVGRPicked  = SUCCEEDED Then 
-		' Adjust Tool's position to the result pose to re-establish
-		' the trained relation between tool and target.
-		
-		CurPos_Trans = P2T(CurPos)
-		CurPosInv_Trans = TInv(CurPos_Trans) ' Output of TTR stored in P[50+CamIdx]=curPos
-		Target_Trans = P2T(Target_Pos)
-		Tool_Def = TMul(CurPosInv_Trans, Target_Trans)	' Output of XT
+	If fResult(0)  = SUCCEEDED Then 
+		' Get RunTime Tool Offset w.r.t. T0.
+		' TransCurrTool_2_NewTool = Inv(TransCurPos_2_Base) * TransNewPick_2_Base
 
-		Tool setTool, T2P(Tool_Def)
+		' Get Current Position about T0 (TrainTime Tool) (w.r.t. W0)
+		CurPos_Trans = P2T(ConvertPosTool(CurPos, setTool, 0))			
+		
+		' Get Pick Target about T0 (RunTime Tool) (w.r.t. W0)
+		Target_Trans = P2T(ConvertPosTool(Target_Pos, setTool, 0))		
+		
+		' Get Offset associated with Pick Target (w.r.t. RunTime Tool)
+		CurPosInv_Trans = TInv(CurPos_Trans)
+									
+		' Transform to RuntimeTool w.r.t. TrainTime Tool
+		Tool_Def = T2P(TMul(CurPosInv_Trans, Target_Trans))
+
+		'Set Tool
+		TakeArm
+		Tool setTool, Tool_Def
+
+		'Set Output
+		CGNX_RunVGRPicked(0) = SUCCEEDED
+		CGNX_RunVGRPicked(1) = Tool_Def
 	End If
 End Function
