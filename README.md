@@ -20,7 +20,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### System Requirements
 
-- RC8 Controller 
+- RC8 Controller Ver.1.10.* or higher.
 - Wincaps III
 
 ---
@@ -29,12 +29,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Please read carefully before using this version.** <p></p>
 
+**v2.1.0**
+- Major API directory changes
+
+**v1.7.4**
+- Added Missiong aling functions (per Issue #9)
+
+**v1.7.2**
+- CGNX_RunVGRPicked Implemented (per Issue #7)
+
+**v1.7.1**
+- Using header file to define EasySetup Positions and Tool Offset (per Issue #8)
+
+**v1.7.0-alpha**
+- CGNX_CS Function Added
+- CGNX_IC Function Added
+- CGNX_TA Function Added
+- CGNX_XA Function Added
+- CGNX_XTN Function Added 
+- CGNX_HECalibration Added
+
+**v.1.6.30**
+- Change Var Type from int to String for resultMode, cam, targetID, and StepID (per Issue #6)
+
 **v1.6.25**
 - Allows Vision HMI to act as the client (per Issue #3 )
 
 **v1.6.24**
 - Added Singularity avoidance feature when moving 
 - Set all motion figures to Auto Fig -2. (per Issue #1 )
+- Update - Added an Offset to Trained Positions. (per Issue #5)
 
 **v1.6.23**
 - Integration of Vision_Lib functions with new DPAM_stdlib function
