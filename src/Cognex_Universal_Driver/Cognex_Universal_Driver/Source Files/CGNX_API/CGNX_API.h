@@ -43,21 +43,21 @@
 ' + Reception/Transmisison (Denso to Cognex Commands)
 ' + Reception/Transmisison (Cognex to Denso Commands)
 '========================================================================================
-#Include "Vision_Comm\Vision_Comm.pcs"
+#Include "CGNX_Comm.pcs"
 
 '========================================================================================
 ' + Cognex Vision Library Functions
 '   (For function details, refer to Cognex Robot Library manual.)
 ' + Convenience Functions
 '========================================================================================
-#Include "Vision_Lib\Vision_Lib.pcs"
+#Include "CGNX_Lib.pcs"
 
 '========================================================================================
 ' + Cognex Vision HMI Functions
 '   (For function details, refer to Cognex Robot Library manual.)
 ' + Application Commands
 '======================================================================================== 
-#Include "Vision_HMI\Vision_HMI.pcs"
+#Include "CGNX_HMI.pcs"
 
 '========================================================================================
 ' + Utility Functions

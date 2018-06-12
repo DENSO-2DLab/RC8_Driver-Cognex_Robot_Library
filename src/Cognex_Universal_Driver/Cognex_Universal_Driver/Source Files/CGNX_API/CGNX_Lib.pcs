@@ -1,6 +1,6 @@
 '!TITLE "Cognex Vision Library Functions"
 
-#Include "..\CGNX_API.h"
+#Include "CGNX_API.h"
 
 '========================================================================================
 'Cognex Vision Library Functions(For function details, refer to Cognex Robot Library manual.)

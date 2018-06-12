@@ -1,6 +1,6 @@
 '!TITLE "Cognex Vision HMI Functions"
 
-#Include "..\CGNX_API.h"
+#Include "CGNX_API.h"
 
 '========================================================================================
 'Cognex Vision HMI Functions(For function details, refer to Cognex Robot Library manual.)

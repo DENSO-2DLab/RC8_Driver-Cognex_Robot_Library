@@ -1,6 +1,6 @@
 '!TITLE "Vision Communication Functions"
 
-#Include "..\CGNX_API.h"
+#Include "CGNX_API.h"
 
 '========================================================================================
 ' Initialization / Close
