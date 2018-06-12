@@ -1,6 +1,6 @@
 '!TITLE "Denso robot program"
 
-#Include "..\CGNX_API\CGNX_API.pcs"
+#Include "..\CGNX_API\CGNX_API.h"
 
 Sub Main
 	Dim recvMsg As Variant

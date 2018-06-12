@@ -3,7 +3,7 @@
 #Include <Variant.h>
 
 '========================================================================================
-'User Data
+'User Data (PLEASE SETUP THIS SECTION ACCORDINGLY)
 '========================================================================================
 
 '
@@ -16,7 +16,7 @@
 'EasySetup Program Settings
 '
 #Define _WORKING_TOOL_	1					   ' Tool Offset to be configured 
-#Define _TRAIN_POS_OFFSET_ 	90				   ' Trained Pos Index Start (default P90)
+#Define _TRAIN_POS_OFFSET_	90				   ' Trained Pos Index Start (default P90)
 #Define _TRAIN_POS_0_ (0 + _TRAIN_POS_OFFSET_) ' Home Pos
 #Define _TRAIN_POS_1_ (1 + _TRAIN_POS_OFFSET_) ' Calibration Start Pos
 #Define _TRAIN_POS_2_ (2 + _TRAIN_POS_OFFSET_) ' Trained Pick Pos (StepID=1)
@@ -33,7 +33,7 @@
 'API Data
 '========================================================================================
 
-#Define CGNX_API_VER	"1.7.5"
+#Define CGNX_API_VER	"2.0.1"
 #Define SUCCEEDED		1
 #Define FAILED			0
 
@@ -62,4 +62,4 @@
 '========================================================================================
 ' + Utility Functions
 '========================================================================================
-#Include "DPAM_stdlib.pcs"
+#Include "CGNX_RobotSub.pcs"

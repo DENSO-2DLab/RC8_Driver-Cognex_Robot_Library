@@ -1,7 +1,0 @@
-'!TITLE "Denso robot program"
-
-#Include "..\CGNX_API.pcs"
-
-Sub Main
-	
-End Sub

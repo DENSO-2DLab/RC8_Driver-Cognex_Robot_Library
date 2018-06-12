@@ -1,8 +1,0 @@
-'!TITLE "Denso robot program"
-
-'
-'Close the communication line
-'
-Sub CGNX_DevClose(ByVal srvID As Integer)
-	Comm.Close srvID
-End Sub
