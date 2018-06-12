@@ -1,0 +1,322 @@
+'!TITLE "Cognex Vision HMI Functions"
+
+#Include "..\CGNX_API.h"
+
+'========================================================================================
+'Cognex Vision HMI Functions(For function details, refer to Cognex Robot Library manual.)
+'======================================================================================== 
+
+'
+'Set Speed
+'
+Function CGNX_SS(ByVal recvCmd As Variant) As String
+	CGNX_SS = Sprintf("SS,%d", FAILED)
+	If checkInputData(recvCmd(0), "SS") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		' Set External Speed		
+		ExtSpeed Val(recvCmd(1))
+
+		' Verify that External Speed changed to new value
+		If CurExtSpd = Val(recvCmd(1)) Then 
+			CGNX_SS = Sprintf("%s,%d", recvCmd(0), SUCCEEDED)
+		End If
+	Exit Function
+	
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Get Speed
+'
+Function CGNX_GS(ByVal recvCmd As Variant) As String
+	CGNX_GS = Sprintf("GS,%d", FAILED)
+	If checkInputData(recvCmd(0), "GS") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		'Get current external speed
+		CGNX_GS = Sprintf("%s,%d,%f", recvCmd(0), SUCCEEDED, CurExtSpd)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Move Relative (Position Type)
+'
+Function CGNX_MR(ByVal recvCmd As Variant) As String
+	CGNX_MR = Sprintf("MR,%d", FAILED)
+	If checkInputData(recvCmd(0), "MR") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		Dim relRobPos As Position
+		
+		'X-Y-Z Offets
+		LetX relRobPos = Val(recvCmd(1))
+		LetY relRobPos = Val(recvCmd(2))
+		LetZ relRobPos = Val(recvCmd(3))
+			
+		'Rz-Ry-Rx (A-B-C on Cognex Documentation) Offsets
+		LetRz relRobPos =  Val(recvCmd(4))
+		LetRy relRobPos =  Val(recvCmd(5))
+		LetRx relRobPos =  Val(recvCmd(6))
+
+		'Do Relative Move
+		Call Move2Point(Dev(CurPos, relRobPos))
+
+		'Send Response
+		CGNX_MR = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CurPos2Str())
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Teach Point (Based on Index value)
+'
+Function CGNX_TP(ByVal recvCmd As Variant) As String
+	CGNX_TP = Sprintf("TP,%d", FAILED)
+	If checkInputData(recvCmd(0), "TP") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		'Store Current position into P type variable.
+		P[_TRAIN_POS_OFFSET_ + Val(recvCmd(1))] = P(0,0,0,0,0,0,-1)
+		P[_TRAIN_POS_OFFSET_ + Val(recvCmd(1))] = CurPos
+
+		'Check that current variable has changed. 
+		If P[_TRAIN_POS_OFFSET_ + Val(recvCmd(1))] = P(0,0,0,0,0,0,-1)  Then			
+		 	Exit Function
+		End If
+
+		CGNX_TP = Sprintf("%s,%d", recvCmd(0), SUCCEEDED)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+' Move to Point (P Variable)
+' 
+Function CGNX_MP(ByVal recvCmd As Variant) As String
+	CGNX_MP = Sprintf("MP,%d", FAILED)
+	If checkInputData(recvCmd(0), "MP") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		'Move to Point Position
+		Call Move2Point(P[_TRAIN_POS_OFFSET_ + Val(recvCmd(1))])
+
+		'Send Response
+		CGNX_MP = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CurPos2Str())
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+' Set Output
+'
+Function CGNX_SO(ByVal recvCmd As Variant) As String
+	CGNX_SO = Sprintf("SO,%d", FAILED)
+	If checkInputData(recvCmd(0), "SO") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		Dim portNo As Integer 
+		portNo = Val(recvCmd(1))
+
+		If Val(recvCmd(2)) = 1  Then
+			Set IO[portNo]
+		Else
+			Reset IO[portNo]
+		End If
+		
+		CGNX_SO = Sprintf("%s,%d", recvCmd(0), SUCCEEDED)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Move Relative (Joint Type)
+' 
+Function CGNX_MJ(ByVal recvCmd As Variant) As String
+	CGNX_MJ = Sprintf("MJ,%d", FAILED)
+	If checkInputData(recvCmd(0), "MJ") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		Dim relRobPos As Joint
+		
+		'Joint Offets
+		LetJ 1, relRobPos = Joint(1, CurJnt) + Val(recvCmd(1))
+		LetJ 2, relRobPos = Joint(2, CurJnt) + Val(recvCmd(2))
+		LetJ 3, relRobPos = Joint(3, CurJnt) + Val(recvCmd(3))
+		LetJ 4, relRobPos = Joint(4, CurJnt) + Val(recvCmd(4))
+		LetJ 5, relRobPos = Joint(5, CurJnt) + Val(recvCmd(5))
+		LetJ 6, relRobPos = Joint(6, CurJnt) + Val(recvCmd(6))
+
+		'Do Relative Move
+		Call Move2Point(J2P(relRobPos))
+		
+		'Send Response
+		CGNX_MJ = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CurJnt2Str())
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Get API Version
+'
+Function CGNX_GV(ByVal recvCmd As Variant) As String
+	CGNX_GV = Sprintf("GV,%d", FAILED)
+	If checkInputData(recvCmd(0), "GV") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler	
+		' Get API Version
+		CGNX_GV = Sprintf("%s,%d,%s", recvCmd(0),_
+						  SUCCEEDED, CGNX_API_VER)
+	Exit Function
+			
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'----------------------------------------------------------------------------------------
+'Application Commands
+'----------------------------------------------------------------------------------------
+
+'
+'Calibrate Robot/Camera
+'
+Function CGNX_CAL(ByVal recvCmd As Variant) As String
+	CGNX_CAL = Sprintf("CAL,%d", FAILED)
+	If checkInputData(recvCmd(0), "CAL") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		Dim fResult As Integer
+
+		Call Move2Point(P[_TRAIN_POS_1_])
+		
+		fResult = CGNX_AutoCalib(_VIS_DEV_COM_,Str(recvCmd(1)),"0",0.5)
+		CGNX_CAL = Sprintf("%s,%d", recvCmd(0), fResult)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
+
+'
+'Train Step
+'
+Function CGNX_TVGR(ByVal recvCmd As Variant) As String
+	CGNX_TVGR = Sprintf("TVGR,%d", FAILED)
+	If checkInputData(recvCmd(0), "TVGR") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		Dim fResult As Integer
+		
+		'Get StepID
+		Select Case Val(recvCmd(1))	
+			Case 1 ' Target on Gripper
+				Call Move2Point(P[_TRAIN_POS_2_])
+
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"1") =_
+										FAILED Then Exit Function
+				Call ReleasePart
+				Call Move2Point(P[_TRAIN_POS_0_])
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"1") =_
+									   FAILED Then Exit Function
+
+			Case 2 ' Target on Gripper (No Release)
+				Call Move2Point(P[_TRAIN_POS_3_])
+
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"2") =_
+									   FAILED Then Exit Function
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"2") =_
+									   FAILED Then Exit Function
+				
+			Case 3 ' Target in Golden Place Position
+				Call Move2Point(P[_TRAIN_POS_0_])
+
+				If CGNX_TrainVGRTarget(_VIS_DEV_COM_,"3") =_
+									   FAILED Then Exit Function
+				Call Move2Point(P[_TRAIN_POS_4_])
+				If CGNX_TrainVGRMotion(_VIS_DEV_COM_,"3") =_
+									   FAILED Then Exit Function
+
+			Case Else
+				Exit Function
+		End Select
+	
+		'Return Success Message
+		CGNX_TVGR = Sprintf("TVGR,%d", SUCCEEDED)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber & ": " & err.Description
+End Function
+
+'
+'Execute Step 
+'
+Function CGNX_XVGR(ByVal recvCmd As Variant) As String
+	Dim fResult As Variant
+	Dim tempPos As Position
+
+	CGNX_XVGR = Sprintf("XVGR,%d", FAILED)
+	If checkInputData(recvCmd(0), "XVGR") = FAILED Then Exit Function
+
+	On Error GoTo ErrorHandler
+		'Check StepID
+		Select Case Val(recvCmd(1))
+			Case 1
+				Call Move2Point(P[_TRAIN_POS_0_])
+				
+				TakeArm Keep = 1
+				Tool 1, ToolPos(0)	'Initialize Tool 1
+
+				fResult = CGNX_RunVGR(_VIS_DEV_COM_,"1","0")
+				If fResult(0)  = FAILED Then Exit Function
+				
+				tempPos = fResult(1)
+				Call Move2Point(P[_TRAIN_POS_2_])		' Move to Pre-Position
+				P[_TRAIN_POS_3_] = P[_TRAIN_POS_2_] + tempPos
+
+				'Pick Part
+				Call MoveAndPickPart(P[_TRAIN_POS_3_])	' Pick Part
+				Call Move2Point(P[_TRAIN_POS_2_])		' Move to Pre-Position
+
+			Case 2 'Target On Gripper
+				Call Move2Point(P[_TRAIN_POS_3_])
+
+				If CGNX_RunVGRPicked(_VIS_DEV_COM_,"2","1") =_
+									 FAILED Then Exit Function
+
+			Case 3 'Target on gripper, rogot at position P3
+				fResult = CGNX_RunVGR(_VIS_DEV_COM_,"3","1")
+				If fResult(0) = FAILED Then Exit Function
+								
+				tempPos = fResult(1)
+				Call Move2Point(tempPos)
+				Call MoveAndPlacePart(tempPos)	' Place Part
+				Call Move2Point(P[_TRAIN_POS_0_])
+
+			Case Else
+				Exit Function
+		End Select
+
+		CGNX_XVGR = Sprintf("XVGR,%d", SUCCEEDED)
+	Exit Function
+
+	ErrorHandler:
+		PrintMsg Now & "- " & err.OriginalNumber &": " & err.Description
+End Function
